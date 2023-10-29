@@ -20,4 +20,4 @@ final Map<String, WidgetBuilder> routes = {
 };
 
 // Optionally, you can define a default route to handle unknown routes
-const String initialRoute = '/login';
+const String initialRoute = '/home';

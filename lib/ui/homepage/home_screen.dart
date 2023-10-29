@@ -26,16 +26,16 @@ class _HomeState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    initCoin();
+    // initCoin();
 
   }
-  Future<void> initCoin() async {
-    // Perform your asynchronous actions here after the widget is initialized.
-    String? coinValue = await getCoin(); // Use await to get the value from the Future.
-    String? emailValue = await getEmail();
-    coin = coinValue!;
-    email = emailValue!;
-  }
+  // Future<void> initCoin() async {
+  //   // Perform your asynchronous actions here after the widget is initialized.
+  //   String? coinValue = await getCoin(); // Use await to get the value from the Future.
+  //   String? emailValue = await getEmail();
+  //   coin = coinValue!;
+  //   email = emailValue!;
+  // }
 
   @override
   Widget build(BuildContext context) {

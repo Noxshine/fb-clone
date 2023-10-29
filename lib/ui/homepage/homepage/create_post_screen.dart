@@ -75,7 +75,7 @@ class _PostScreenState extends State<PostScreen> {
                   createPostData.content = textController.text;
                   createPostData.timestamp = DateTime.timestamp();
 
-
+                  // send create post request, need jwt
 
                 },
               ),
@@ -107,7 +107,7 @@ class _PostScreenState extends State<PostScreen> {
                       maxLines: null,
                       decoration: InputDecoration(
                         // contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-                        hintText : "What's on your mind",
+                        hintText : "What's on your mind ?",
                         hintStyle: TextStyle( color: GREY.shade400,),
                         border: InputBorder.none, // Remove the underline
                       ),
@@ -158,7 +158,7 @@ class _ImageUploadWidgetState extends State<ImageUploadWidget> {
         Expanded(
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3, // Adjust the number of images per row as needed
+              crossAxisCount: 2, // Adjust the number of images per row as needed
             ),
             itemCount: widget.images.length,
             itemBuilder: (context, index) {
