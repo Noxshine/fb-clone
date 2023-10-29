@@ -1,23 +1,19 @@
 
 
 import 'package:anti_fb/ui/homepage/home_screen.dart';
-import 'package:anti_fb/ui/homepage/post.dart';
-import 'package:anti_fb/ui/signup/signup7.dart';
+import 'package:anti_fb/ui/homepage/homepage/create_post_screen.dart';
 import 'package:anti_fb/ui/signup/signup_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:anti_fb/ui/login_screen.dart';
+import 'package:anti_fb/ui/login/login_screen.dart';
 
 // Define your named routes
 final Map<String, WidgetBuilder> routes = {
   '/login': (context) => const LoginScreen(),
-
   '/signup': (context) => const SignupScreen(),
-  '/signup7': (context) => const SignupForm7(),
 
   '/home' : (context) => const HomeScreen(),
   '/post' : (context) => const PostScreen(),
 
-  // '/home': (context) => HomeScreen(),
   // '/profile': (context) => ProfileScreen(),
   // '/friends': (context) => FriendsScreen(),
   // '/messages': (context) => MessagesScreen(),

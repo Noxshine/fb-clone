@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 
-class ButtonWidget extends StatelessWidget{
+class ElevatedButtonWidget extends StatelessWidget{
   final String buttonText;
   final double paddingTop;
   final Color textColor;
@@ -14,7 +14,7 @@ class ButtonWidget extends StatelessWidget{
   final Color borderColor;
   final VoidCallback onPressed;
 
-  const ButtonWidget({super.key, required this.buttonText, required this.paddingTop, required this.textColor,
+  const ElevatedButtonWidget({super.key, required this.buttonText, this.paddingTop = 0, this.textColor = BLACK,
     required this.backgroundColor, this.borderColor = CYAN, required this.onPressed});
 
 

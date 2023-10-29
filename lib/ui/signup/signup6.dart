@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../constants.dart';
 import '../../repository/signup_repo.dart';
 import '../../widgets/AlertDialogWidget.dart';
-import '../../widgets/ButtonWidget.dart';
+import '../../widgets/ElevatedButtonWidget.dart';
 import '../../widgets/TextFieldWidget.dart';
 import '../../widgets/TextWidget.dart';
 
@@ -80,9 +80,18 @@ class _PasswordState extends State<SignupForm6>{
               paddingTop: 10),
         ),
 
-        ButtonWidget(buttonText: 'Next', paddingTop: 10.0, textColor: WHITE,
+        ElevatedButtonWidget(buttonText: 'Next', paddingTop: 10.0, textColor: WHITE,
             backgroundColor: CYAN,
             onPressed: () async {
+              if(pw.text == ''){
+                showNeedProvidePasswordNotification(context);
+                return;
+              }
+              if(repw.text == ''){
+                showNeedProvideRePasswordNotification(context);
+                return;
+              }
+
 
               if(!isPasswordMatch(pw.text, repw.text)){
                 setPasswordNotMatchState();
@@ -98,7 +107,7 @@ class _PasswordState extends State<SignupForm6>{
                 final bool isSignupSuccessful = await SignupRepository.signupUser(signupState!.signupData);
 
                 if(context.mounted){
-                  isSignupSuccessful ? Navigator.pushNamed(context, '/signup7') : showSignupErrorNotification(context);
+                  isSignupSuccessful ? signupState.moveFoward() : showSignupErrorNotification(context);
                 }
 
               }
@@ -112,6 +121,22 @@ class _PasswordState extends State<SignupForm6>{
       context: context,
       builder: (BuildContext context) {
         return const AlertDialogWidget(title: 'Error', text: 'There was an error when trying to sign up');
+      },
+    );
+  }
+  void showNeedProvidePasswordNotification(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AlertDialogWidget(title: 'Error', text: 'Need to provide password');
+      },
+    );
+  }
+  void showNeedProvideRePasswordNotification(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AlertDialogWidget(title: 'Error', text: 'Need re enter password');
       },
     );
   }

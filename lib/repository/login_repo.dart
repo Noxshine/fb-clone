@@ -1,7 +1,5 @@
 
 
-import 'dart:convert';
-
 import 'package:anti_fb/storage.dart';
 
 import '../data/auth/login_api.dart';
@@ -16,7 +14,6 @@ class LoginRepository {
       if(signupResult != false){
         User user = User.fromJson(signupResult);
         saveUser(user); // save information to storage
-
         return true;
       } else {
         return false; // Signup failed

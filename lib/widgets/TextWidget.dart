@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
+
 class TextWidget extends StatelessWidget{
   final String text;
   final double width;
@@ -14,7 +16,7 @@ class TextWidget extends StatelessWidget{
   final FontWeight fontWeight;
 
   const TextWidget({super.key, required this.text, required this.fontSize,
-                    required this.textColor, this.textAlign = TextAlign.left,
+                    this.textColor = BLACK, this.textAlign = TextAlign.left,
                     this.paddingTop = 0, this.paddingBottom = 0,
                     this.paddingRight = 0, this.paddingLeft = 0,
                     this.width = double.infinity,

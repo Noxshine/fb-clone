@@ -1,15 +1,13 @@
 
-import 'package:anti_fb/data/auth/checkemail_api.dart';
-import 'package:anti_fb/models/LoginData.dart';
 import 'package:anti_fb/repository/login_repo.dart';
-import 'package:anti_fb/storage.dart';
-import 'package:anti_fb/widgets/ButtonWidget.dart';
+import 'package:anti_fb/widgets/ElevatedButtonWidget.dart';
+import 'package:anti_fb/widgets/TextButtonWidget.dart';
 import 'package:anti_fb/widgets/TextFieldWidget.dart';
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-import '../data/auth/login_api.dart';
-import '../widgets/AlertDialogWidget.dart';
+import '../../constants.dart';
+import '../../models/LoginData.dart';
+import '../../widgets/AlertDialogWidget.dart';
 
 class LoginScreen extends StatelessWidget{
   const LoginScreen({super.key});
@@ -65,9 +63,13 @@ class LoginForm extends StatelessWidget{
             TextFieldWidget(labelText: 'Email',  paddingTop: 50.0, controller: emailController),
             TextFieldWidget(labelText: 'Password',  paddingTop: 7.0, controller: passwordController, obscureText: true),
 
-            ButtonWidget(buttonText: 'Login', paddingTop: 7.0, textColor: WHITE,
+            ElevatedButtonWidget(buttonText: 'Login', paddingTop: 7.0, textColor: WHITE,
                 backgroundColor: CYAN,
                 onPressed: () async{
+                  if(emailController.text == '' || passwordController.text == ''){
+                    showNeedToEnterEmailAndPasswordNotification(context);
+                    return;
+                  }
                   if (!isValidEmail(emailController.text)) {
                     showInvalidEmailNotification(context);
                     return;
@@ -77,24 +79,18 @@ class LoginForm extends StatelessWidget{
                                                 "aaaaa");
                   LoginRepository loginRepo = LoginRepository();
                   final loginStatus = await loginRepo.login(loginData);
-                  if(context.mounted){
-                    if (loginStatus) {
-                      // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-                      // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-                      print("------------------");
-                      Navigator.pushNamed(context, '/home');
 
-                    } else {
-                      showInvalidEmailOrPasswordNotification(context);
-                    }
+                  if(context.mounted){
+                    if (loginStatus) { Navigator.pushReplacementNamed(context, '/home');
+                    } else { showEmailNotExistNotification(context);}
                   }
                 }),
 
-            ButtonWidget(buttonText: 'Signup new account', paddingTop: 100.0, textColor: CYAN,
+            TextButtonWidget(buttonText: 'Forgot password?', paddingTop: 5, textColor: BLACK, backgroundColor: TRANSPARENT,
+                  onPressed: (){ Navigator.pushNamed(context, '/signup');}),
+            ElevatedButtonWidget(buttonText: 'Signup new account', paddingTop: 100.0, textColor: CYAN,
                 backgroundColor: WHITE,
-                onPressed: (){
-                  Navigator.pushNamed(context, '/signup');
-                }),
+                onPressed: (){ Navigator.pushNamed(context, '/signup');}),
 
           ],
         ),
@@ -107,7 +103,14 @@ class LoginForm extends StatelessWidget{
     final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
     return emailRegex.hasMatch(email);
   }
-
+  void showNeedToEnterEmailAndPasswordNotification(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AlertDialogWidget(title: 'Error', text: 'Need to enter email and password');
+      },
+    );
+  }
   void showInvalidEmailNotification(BuildContext context) {
     showDialog(
       context: context,
@@ -116,11 +119,11 @@ class LoginForm extends StatelessWidget{
       },
     );
   }
-  void showInvalidEmailOrPasswordNotification(BuildContext context) {
+  void showEmailNotExistNotification(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const AlertDialogWidget(title: 'Error', text: 'Not exist');
+        return const AlertDialogWidget(title: 'Error', text: 'Email address not exist');
       },
     );
   }

@@ -19,8 +19,9 @@ const storage = FlutterSecureStorage();
 
 void saveUser(User user){
   storage.write(key: 'id', value: user.id.toString());
-  storage.write(key: 'firstname', value: user.firstname ?? '');
-  storage.write(key: 'lastname', value: user.lastname ?? '');
+  storage.write(key: 'email', value: user.email );
+  storage.write(key: 'firstname', value: user.firstname );
+  storage.write(key: 'lastname', value: user.lastname );
   storage.write(key: 'token', value: user.token);
   storage.write(key: 'avatar', value: user.avatar.toString());
   storage.write(key: 'active', value: user.active.toString());
@@ -36,6 +37,21 @@ Future<String?> getName() async {
   return await storage.read(key: 'firstname');
 }
 
-Future<String?> getCoin() async {
+Future<String?> getCoin(){
   return storage.read(key: 'coins');
+}
+Future<String?> getId(){
+  return storage.read(key: 'id');
+}
+
+Future<String?> getEmail(){
+  return storage.read(key: 'email');
+}
+
+
+Future<void> printJwt()async {
+  print(await getJwt());
+}
+Future<void> printCoin()async {
+  print(await getCoin());
 }

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../constants.dart';
 import '../../data/auth/checkemail_api.dart';
 import '../../widgets/AlertDialogWidget.dart';
-import '../../widgets/ButtonWidget.dart';
+import '../../widgets/ElevatedButtonWidget.dart';
 import '../../widgets/TextFieldWidget.dart';
 import '../../widgets/TextWidget.dart';
 
@@ -65,7 +65,7 @@ class _EmailState extends State<SignupForm4>{
 
         ),
 
-        ButtonWidget(buttonText: 'Next', paddingTop: 10.0, textColor: WHITE,
+        ElevatedButtonWidget(buttonText: 'Next', paddingTop: 10.0, textColor: WHITE,
             backgroundColor: CYAN,
             onPressed: () async{
               if (!isValidEmail(emailController.text)) {

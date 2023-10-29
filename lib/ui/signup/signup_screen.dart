@@ -5,6 +5,7 @@ import 'package:anti_fb/ui/signup/signup3.dart';
 import 'package:anti_fb/ui/signup/signup4.dart';
 import 'package:anti_fb/ui/signup/signup5.dart';
 import 'package:anti_fb/ui/signup/signup6.dart';
+import 'package:anti_fb/ui/signup/signup7.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
@@ -29,6 +30,7 @@ class SignupState extends State<SignupScreen>{
   void moveToScreen4(){ setState(() {screen = SignupForm4(signupData.email);});}
   void moveToScreen5(){ setState(() {screen = const SignupForm5();}); }
   void moveToScreen6(){ setState(() {screen = const SignupForm6();});}
+  void moveToScreen7(){ setState(() {screen = const SignupForm7();});}
 
   List<void Function()> moveScreen = [];
   @override
@@ -40,14 +42,7 @@ class SignupState extends State<SignupScreen>{
     currentFormIndex = 0;
     screen = const SignupForm1();
 
-    moveScreen = [
-      moveToScreen1,
-      moveToScreen2,
-      moveToScreen3,
-      moveToScreen4,
-      moveToScreen5,
-      moveToScreen6,
-    ];
+    moveScreen = [ moveToScreen1, moveToScreen2, moveToScreen3, moveToScreen4, moveToScreen5, moveToScreen6, moveToScreen7,];
   }
   void moveFoward() {
     currentFormIndex++;

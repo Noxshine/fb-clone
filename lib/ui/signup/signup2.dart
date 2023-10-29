@@ -1,12 +1,11 @@
 
 
-import 'package:anti_fb/routes.dart';
 import 'package:anti_fb/ui/signup/signup_screen.dart';
 import 'package:anti_fb/widgets/TextWidget.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
-import '../../widgets/ButtonWidget.dart';
+import '../../widgets/ElevatedButtonWidget.dart';
 import '../../widgets/TextFieldWidget.dart';
 
 
@@ -72,7 +71,7 @@ class _NameState extends State<SignupForm2>{
 
           ),
 
-          ButtonWidget(buttonText: 'Next', paddingTop: 10.0, textColor: WHITE,
+          ElevatedButtonWidget(buttonText: 'Next', paddingTop: 10.0, textColor: WHITE,
               backgroundColor: CYAN,
               onPressed: (){
 

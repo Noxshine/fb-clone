@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../constants.dart';
-import '../../widgets/ButtonWidget.dart';
+import '../../widgets/ElevatedButtonWidget.dart';
 import '../../widgets/TextWidget.dart';
 
 
@@ -44,7 +44,7 @@ class SignupForm3 extends StatelessWidget{
             )
         ),
 
-        ButtonWidget(buttonText: 'Next', paddingTop: 10.0, textColor: WHITE,
+        ElevatedButtonWidget(buttonText: 'Next', paddingTop: 10.0, textColor: WHITE,
             backgroundColor: CYAN,
             onPressed: (){
               if(!calculateAge(birthday)){

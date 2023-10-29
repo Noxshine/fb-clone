@@ -34,7 +34,7 @@ class TextFieldWidget extends StatelessWidget{
             labelText: labelText,
             hintText : hintText,
             hintStyle: TextStyle(
-              color: Colors.grey.shade400, // Adjust the color to make it more bland
+              color: GREY.shade400, // Adjust the color to make it more bland
             ),
             labelStyle: const TextStyle(fontSize: 14.0),
 

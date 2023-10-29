@@ -4,7 +4,7 @@ import 'package:anti_fb/ui/signup/signup_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
-import '../../widgets/ButtonWidget.dart';
+import '../../widgets/ElevatedButtonWidget.dart';
 import '../../widgets/TextWidget.dart';
 
 
@@ -29,14 +29,14 @@ class SignupForm5 extends StatelessWidget{
               labelText: 'Enter 6-Digit Code',
               hintText: '123456',
               hintStyle: TextStyle(
-                color: Colors.grey.shade400, // Adjust the color to make it more bland
+                color: GREY.shade400, // Adjust the color to make it more bland
               ),
             ),
           ),
 
         ),
 
-        ButtonWidget(buttonText: 'Confirm', paddingTop: 10.0, textColor: WHITE,
+        ElevatedButtonWidget(buttonText: 'Confirm', paddingTop: 10.0, textColor: WHITE,
             backgroundColor: CYAN,
             onPressed: (){
               final SignupState? signupState = context.findAncestorStateOfType<SignupState>();
@@ -44,7 +44,7 @@ class SignupForm5 extends StatelessWidget{
               // TODO: Signup new user
             }),
 
-        ButtonWidget(buttonText: "I'm not receive code", paddingTop: 5.0, textColor: CYAN,
+        ElevatedButtonWidget(buttonText: "I'm not receive code", paddingTop: 5.0, textColor: CYAN,
             backgroundColor: WHITE,
             onPressed: (){
               Navigator.pushNamed(context, '/signup');
