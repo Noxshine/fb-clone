@@ -4,11 +4,14 @@ import 'dart:io';
 import 'package:anti_fb/widgets/TextWidget.dart';
 import 'package:anti_fb/widgets/icon/IconMessageWidget.dart';
 import 'package:anti_fb/widgets/icon/IconSearchWidget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:readmore/readmore.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../constants.dart';
 import '../../../widgets/ElevatedButtonWidget.dart';
+import '../../../widgets/profile_avatar.dart';
 
 class HomePage extends StatelessWidget{
   HomePage({super.key, required this.coin, required this.email});
@@ -34,13 +37,13 @@ class HomePage extends StatelessWidget{
           ),
 
           SliverAppBar(
-            backgroundColor: GREEN,
+            backgroundColor: WHITE,
             title: const PostButton(),
             actions: [
               Container(
                 padding: const EdgeInsets.only(right: 10),
                 alignment: Alignment.centerRight,
-                child: const Icon(Icons.image),
+                child: const Icon(Icons.image, color: GREEN),
               )
             ]
             // snap: true,
@@ -134,9 +137,11 @@ class _ListPostWidgetState extends State<ListPostWidget> {
   void initState() {
     super.initState();
     for (int i = 0; i < 10; i++) {
-      listPosts.add(const PostWidget('abc@123.com','10h37', 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz'
-          'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz'
-          'zzzzzzzzzzfdfdzzzzzzzzzdfdsfsdzzzzzzzzzzzzzzzzfsjdjhfbkjsdhfkjbsdkbfjdfsdkjfzjshdbfjhsadbfjhdzzzzzzzzzzzzz', []));
+      listPosts.add(const PostWidget('abc@123.com','10h37', 'ssssssssssiiiiiiiiiiiiiiiiiiiiiiiiiiuuuuuuuuuuuuuuu'
+          'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu'
+          'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu'
+          'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu'
+          'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu',[]));
     }
   }
 
@@ -156,8 +161,6 @@ class PostWidget extends StatefulWidget {
   final String content;
   final List<XFile> images;
 
-
-
   const PostWidget(this.useremail, this.timestamp, this.content, this.images, {super.key});
   @override
   State<PostWidget> createState() => _PostWidgetState();
@@ -169,6 +172,7 @@ class _PostWidgetState extends State<PostWidget>{
   late String content;
   late List<XFile> images;
 
+  late String imageUrl;
 
   late double height;
   late bool kudosChoose;
@@ -181,6 +185,8 @@ class _PostWidgetState extends State<PostWidget>{
     content = widget.content;
     images = widget.images;
 
+    imageUrl = 'assets/images/messi-world-cup.png';
+
     height = 30;
     kudosChoose = false;
     disChoose = false;
@@ -190,80 +196,97 @@ class _PostWidgetState extends State<PostWidget>{
     return Container (
         padding: const EdgeInsets.only(top: 5),
         child: Container(
+          padding: const EdgeInsets.all(5),
           color: WHITE,
           child: SingleChildScrollView(
             child: Column(
               children: [
                 Container(
-                  height: 50,
-                  padding: const EdgeInsets.only(left:15),
+                  // padding: const EdgeInsets.only(left:15),
                   child: Row(
                     children: [
-                      Container(
-                        width: 30, height: 30,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            fit: BoxFit.cover, image: AssetImage('assets/images/messi-world-cup.png'), // Specify the asset path
-                          ),
+                      const ProfileAvatar(imageUrl: 'assets/images/messi-world-cup.png'),
+                      const SizedBox(width: 8.0),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              useremail,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  timestamp,
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 12.0,
+                                  ),),
+                                Icon(
+                                  Icons.public,
+                                  color: Colors.grey[600],
+                                  size: 12.0,
+                                )
+                              ],
+                            )
+                          ],
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.only(left:10),
-                        child : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            TextWidget(text: useremail, fontSize: 14, paddingLeft: 0, width: 100,),
-                            TextWidget(text: timestamp, fontSize: 14, paddingLeft: 0, width: 100,),
-                          ],
-                        )
+                      IconButton(
+                        icon: const Icon(Icons.more_horiz),
+                        onPressed: (){},
                       )
+
+
+
                     ],
                   ),
                 ),
-                Container(
-                  color: RED,
-                  height: height,
-                  child: TextWidget(text: content, fontSize: 14,),
+                ReadMoreText(
+                  content,
+                  trimLines: 2,
+                  colorClickableText: Colors.grey,
+                  trimMode: TrimMode.Line,
+                  trimCollapsedText: '   Show more',
+                  trimExpandedText: '',
+                  moreStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color:Colors.grey),
                 ),
-                Container(
-                  color: RED,
-                  height: 30,
-                  child: ElevatedButtonWidget(buttonText: 'fff', backgroundColor: GREEN, onPressed: () {
-                    setState(() {
-                      height = 100;
-                    });
-                  },),
-                ),
-                Container(
-                  height : 100,
-                  padding: const EdgeInsets.only(top: 5),
-                  child: ImageDisplay(images: images,),
-                ),
+                imageUrl != null ? Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: CachedNetworkImage(imageUrl: imageUrl!!),
+                ) :const SizedBox.shrink(),
+
+                // Container(
+                //   height : 100,
+                //   padding: const EdgeInsets.only(top: 5),
+                //   child: ImageDisplay(images: images,),
+                // ),
 
                 Container(
-                  color: ORANGE, height: 30,
+                  height: 30,
                   padding: const EdgeInsets.only(left: 10),
                   child: const Row(
                     children: [
                       Row (
                         children: [
-                          Icon( Icons.sentiment_satisfied_alt, color: BLUE  ,),
-                          TextWidget(text: '10', textColor: BLUE ,fontSize: 10, paddingLeft: 5, width: 30,)
+                          Icon( Icons.sentiment_satisfied_alt, color: CYAN ,),
+                          TextWidget(text: '10', textColor: GREY ,fontSize: 10, paddingLeft: 5, width: 30,)
                         ],
                       ),
                       Row (
                         children: [
-                          Icon( Icons.sentiment_dissatisfied_sharp, color: BLUE  ,),
-                          TextWidget(text: '10', textColor: BLUE ,fontSize: 10, paddingLeft: 5, width: 30,)
+                          Icon( Icons.sentiment_dissatisfied_sharp, color: CYAN ,),
+                          TextWidget(text: '10', textColor: GREY ,fontSize: 10, paddingLeft: 5, width: 30,)
                         ],
                       )
                     ]
                   )
                 ),
-
-                Container(
+                const Divider( thickness: 0.1, color: GREY, ),
+                SizedBox(
                   height : 30,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -276,24 +299,22 @@ class _PostWidgetState extends State<PostWidget>{
                           });},
                           child: Row (
                             children: [
-                              Icon( Icons.sentiment_satisfied_alt, color: kudosChoose ? BLUE : GREY ,),
-                              TextWidget(text: 'Kudos', textColor: kudosChoose ? BLUE : GREY,fontSize: 12, paddingLeft: 5, width: 50,)
+                              Icon( Icons.sentiment_satisfied_alt, color: kudosChoose ? CYAN : GREY ,),
+                              TextWidget(text: 'Kudos', textColor: kudosChoose ? CYAN : GREY,fontSize: 12, paddingLeft: 5, width: 50,)
                             ],
                           ),
                         )
                       ),
-                      Container(
-                        child : GestureDetector(
-                          onTap: (){ setState(() {
-                            if(!kudosChoose){ disChoose = !disChoose;}
-                          });},
-                          child: Row (
-                            children: [
-                              Icon( Icons.sentiment_dissatisfied_sharp, color: disChoose ? BLUE : GREY ,),
-                              TextWidget(text: 'Dissapoint', textColor: disChoose ? BLUE : GREY,fontSize: 12, paddingLeft: 5, width: 70,)
-                            ],
-                          ),
-                        )
+                      GestureDetector(
+                        onTap: (){ setState(() {
+                          if(!kudosChoose){ disChoose = !disChoose;}
+                        });},
+                        child: Row (
+                          children: [
+                            Icon( Icons.sentiment_dissatisfied_sharp, color: disChoose ? CYAN : GREY ,),
+                            TextWidget(text: 'Dissapoint', textColor: disChoose ? CYAN : GREY,fontSize: 12, paddingLeft: 5, width: 70,)
+                          ],
+                        ),
                       ),
                       Container(
                           padding: const EdgeInsets.only(right: 10),
@@ -342,135 +363,7 @@ class ImageDisplay extends StatelessWidget{
       ]
     );
   }
-}
 
-
-
-class HomePageContent extends StatelessWidget {
-  const HomePageContent({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),
-        ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),
-        ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),ElevatedButtonWidget(buttonText: 'I already have an account',
-            paddingTop: 10.0,
-            textColor: CYAN,
-            backgroundColor: WHITE,
-            onPressed: () {}),
-      ],
-    );
-  }
 }
 
 

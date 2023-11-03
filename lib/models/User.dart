@@ -19,6 +19,7 @@ class User {
     required this.coins,
   });
 
+
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['data']['id'] as int,

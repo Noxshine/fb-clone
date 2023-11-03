@@ -30,7 +30,7 @@ class NotificationPage extends StatelessWidget{
           floating: true,
         ),
         SliverList(
-            delegate: SliverChildListDelegate( [const HomePageContent()]
+            delegate: SliverChildListDelegate( []
             )
         ),
       ]

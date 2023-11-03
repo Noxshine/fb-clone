@@ -29,7 +29,7 @@ class MenuPage extends StatelessWidget{
             backgroundColor: Colors.white,
             floating: true,
           ),
-          SliverList( delegate: SliverChildListDelegate( [const HomePageContent()])
+          SliverList( delegate: SliverChildListDelegate( [])
           ),
         ]
     );
