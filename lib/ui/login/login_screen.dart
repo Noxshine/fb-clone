@@ -6,7 +6,7 @@ import 'package:anti_fb/widgets/TextFieldWidget.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
-import '../../models/LoginData.dart';
+import '../../models/request/LoginData.dart';
 import '../../widgets/AlertDialogWidget.dart';
 
 class LoginScreen extends StatelessWidget{
@@ -75,8 +75,7 @@ class LoginForm extends StatelessWidget{
                     return;
                   }
                   LoginData loginData = LoginData(emailController.text,
-                                                passwordController.text,
-                                                "aaaaa");
+                                                passwordController.text,);
                   LoginRepository loginRepo = LoginRepository();
                   final loginStatus = await loginRepo.login(loginData);
 

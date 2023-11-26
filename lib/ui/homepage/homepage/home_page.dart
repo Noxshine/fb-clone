@@ -10,22 +10,21 @@ import 'package:readmore/readmore.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../constants.dart';
-import '../../../widgets/ElevatedButtonWidget.dart';
 import '../../../widgets/profile_avatar.dart';
+import 'appbar.dart';
+import 'createpostbar.dart';
 
 class HomePage extends StatelessWidget{
   HomePage({super.key, required this.coin, required this.email});
 
-  late String coin;
-  late String email;
+  String coin ;
+  String email;
   @override
   Widget build(BuildContext context) {
-    String coin = '10';
-    String email = 'lll';
     return CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            title: HomeAppBarTitle(coin: coin,),
+            title: HomeAppBarTitle(coin),
             backgroundColor: WHITE,
             floating: true,
             actions: const [
@@ -38,7 +37,7 @@ class HomePage extends StatelessWidget{
 
           SliverAppBar(
             backgroundColor: WHITE,
-            title: const PostButton(),
+            title: const CreatePostButton(),
             actions: [
               Container(
                 padding: const EdgeInsets.only(right: 10),
@@ -55,72 +54,7 @@ class HomePage extends StatelessWidget{
   }
 }
 
-class HomeAppBarTitle extends StatelessWidget {
-  const HomeAppBarTitle({super.key, required this.coin});
-  final String coin;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          alignment: Alignment.centerLeft,
-          child: const Text( 'Anti fb', style: TextStyle(color: CYAN, fontSize: 20, fontWeight: FontWeight.bold,),),
-        ),
-        Padding(
-            padding: const EdgeInsets.only(left: 10), //
-            child: Container(
-              // padding: const EdgeInsets.only(left: 100),
-                width: 100,
-                decoration: BoxDecoration(
-                  color : GREY,
-                  border: Border.all( color: TRANSPARENT,),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: TextWidget(text: "Coin : $coin", fontSize: 16, textColor: YELLOW,paddingLeft: 5,)
-            )
-        ),
-      ]
-    );
-  }
-}
 
-class PostButton extends StatelessWidget{
-  const PostButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return  Row(
-      children: [
-        Container(
-          width: 25, height: 25,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              fit: BoxFit.cover, image: AssetImage('assets/images/messi-world-cup.png'), // Specify the asset path
-            ),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(5),
-            child:  ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: WHITE, // Set the background color to transparent
-                elevation: 0,
-                alignment: AlignmentDirectional.centerStart, // Align the button to the left side of the container
-                padding: EdgeInsets.zero,
-              ),
-              onPressed: () { Navigator.pushNamed(context, '/post');},
-              child: const Text( "What's on your mind?", style: TextStyle( color: BLACK,  fontSize: 14,),),
-            ),
-          ),
-        ),
-
-      ],
-    );
-  }
-
-}
 
 // List of posts
 class ListPostWidget extends StatefulWidget {
@@ -219,17 +153,8 @@ class _PostWidgetState extends State<PostWidget>{
                             ),
                             Row(
                               children: [
-                                Text(
-                                  timestamp,
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 12.0,
-                                  ),),
-                                Icon(
-                                  Icons.public,
-                                  color: Colors.grey[600],
-                                  size: 12.0,
-                                )
+                                Text( timestamp, style: TextStyle(color: GREY[600],  fontSize: 12.0,),),
+                                Icon( Icons.public, color: GREY[600], size: 12.0, )
                               ],
                             )
                           ],
@@ -239,9 +164,6 @@ class _PostWidgetState extends State<PostWidget>{
                         icon: const Icon(Icons.more_horiz),
                         onPressed: (){},
                       )
-
-
-
                     ],
                   ),
                 ),
@@ -256,7 +178,7 @@ class _PostWidgetState extends State<PostWidget>{
                 ),
                 imageUrl != null ? Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: CachedNetworkImage(imageUrl: imageUrl!!),
+                  child: CachedNetworkImage(imageUrl: imageUrl),
                 ) :const SizedBox.shrink(),
 
                 // Container(
@@ -319,7 +241,14 @@ class _PostWidgetState extends State<PostWidget>{
                       Container(
                           padding: const EdgeInsets.only(right: 10),
                           child : GestureDetector(
-                            onTap: (){},
+                            onTap: (){
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => PostScreen(),
+                              //   ),
+                              // );
+                            },
                             child: const Row (
                               children: [
                                 Icon( Icons.comment, color: GREY,),

@@ -7,17 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../constants.dart';
-import '../../../storage.dart';
+import '../../../data/post/addpost_api.dart';
 
 
-class PostScreen extends StatefulWidget {
-  const PostScreen({super.key});
+class CreatePostScreen extends StatefulWidget {
+  const CreatePostScreen({super.key});
 
   @override
-  State<PostScreen> createState() => _PostScreenState();
+  State<CreatePostScreen> createState() => _CreatePostScreenState();
 }
 
-class _PostScreenState extends State<PostScreen> {
+class _CreatePostScreenState extends State<CreatePostScreen> {
   late CreatePostData createPostData;
 
   late Color postButtonBackgroundColor;
@@ -28,7 +28,7 @@ class _PostScreenState extends State<PostScreen> {
   @override
   void initState() {
     super.initState();
-    createPostData = CreatePostData(0, null, '', [], null);
+    createPostData = CreatePostData();
     postButtonBackgroundColor = GREY;
     textController.addListener(() {
       setState(() {
@@ -70,12 +70,10 @@ class _PostScreenState extends State<PostScreen> {
                 style: TextButton.styleFrom( backgroundColor: postButtonBackgroundColor, ),
                 child: const Text( "Post", style: TextStyle(color: BLACK),),
                 onPressed: () async {
-                  int? id = (await getId()) as int?;
-                  createPostData.userid = id!;
-                  createPostData.content = textController.text;
-                  createPostData.timestamp = DateTime.timestamp();
+                  createPostData.described = textController.text;
 
                   // send create post request, need jwt
+                  await AddPostApi.addPost(createPostData);
 
                 },
               ),
@@ -173,6 +171,7 @@ class _ImageUploadWidgetState extends State<ImageUploadWidget> {
   }
 }
 
+// alert dialog
 void _showDiscardNotification(BuildContext context) {
   showDialog(
     context: context,

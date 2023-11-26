@@ -18,3 +18,4 @@ const TRANSPARENT = Colors.transparent;
 
 const myPort = 33333;
 const authUrl = "http://localhost:2400/api/auth";
+const apiUrl = "https://it4788.catan.io.vn";
