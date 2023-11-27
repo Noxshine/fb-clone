@@ -48,7 +48,7 @@ class SignupForm6 extends StatelessWidget{
         ),
 
         ElevatedButtonWidget(buttonText: 'Confirm', paddingTop: 10.0, textColor: WHITE,
-            backgroundColor: CYAN,
+            backgroundColor: FBBLUE,
             onPressed: () async{
 
               final getverifycode = await GetVerifyCodeApi.checkVerifyCode(email, verifyCodeController.text);
@@ -62,7 +62,7 @@ class SignupForm6 extends StatelessWidget{
               }
             }),
 
-        ElevatedButtonWidget(buttonText: "I'm not receive code", paddingTop: 5.0, textColor: CYAN,
+        ElevatedButtonWidget(buttonText: "I'm not receive code", paddingTop: 5.0, textColor: FBBLUE,
             backgroundColor: WHITE,
             onPressed: (){
               // Navigator.pushNamed(context, '/signup');

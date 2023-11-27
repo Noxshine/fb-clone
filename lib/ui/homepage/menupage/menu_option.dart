@@ -1,6 +1,7 @@
 
 
 import 'package:anti_fb/constants.dart';
+import 'package:anti_fb/data/auth/logout_api.dart';
 import 'package:flutter/material.dart';
 
 import '../../../storage.dart';
@@ -22,7 +23,9 @@ class MenuOption extends StatelessWidget{
 
             }),
         ElevatedButtonWidget(buttonText: 'Change password', paddingTop: 10, textColor: BLACK, backgroundColor: GREY,
-            onPressed: (){ Navigator.pushNamed(context, '/');}),
+            onPressed: (){
+          // Navigator.pushNamed(context, '/');
+        }),
         ElevatedButtonWidget(buttonText: 'Logout', paddingTop: 10, textColor: BLACK, backgroundColor: GREY,
           onPressed: (){ _showLogoutNotification(context); }),
       ],
@@ -38,33 +41,35 @@ void _showLogoutNotification(BuildContext context) {
     builder: (BuildContext context) {
       return AlertDialog(
           // title: const Center( child: Text('Logout'),),
-          content:
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const TextWidget(text: 'Log out of your account ?', fontSize: 12),
-              Row(
-                children: [
-                  TextButton(
-                    child: const Text('Cancel',style: TextStyle( color: BLUE),),
-                    onPressed: () {
-                      // Handle 'No' button action here
-                      Navigator.of(context).pop(); // Close the dialog
-                    },
-                  ),
-                  TextButton(
-                    child: const Text('Log out',style: TextStyle( color: RED),),
-                    onPressed: () async {
-                      await deleteAllSecureStorageData();
-                      if(context.mounted){
-                        Navigator.pushReplacementNamed(context, '/login');
-                      }
-                    },
-                  ),
-                ],
-              )
-            ],
-          )
+        content:
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const TextWidget(text: 'Log out of your account ?', fontSize: 12),
+            Row(
+              children: [
+                TextButton(
+                  child: const Text('Cancel',style: TextStyle( color: FBBLUE),),
+                  onPressed: () {
+                    // Handle 'No' button action here
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                ),
+                TextButton(
+                  child: const Text('Log out',style: TextStyle( color: RED),),
+                  onPressed: () async {
+                    await deleteAllSecureStorageData();
+                    await LogoutApi.logout();
+
+                    if(context.mounted){
+                      Navigator.pushReplacementNamed(context, '/login');
+                    }
+                  },
+                ),
+              ],
+            )
+          ],
+        )
       );
     },
   );

@@ -11,6 +11,7 @@ const WHITE = Colors.white;
 const GREY = Colors.grey;
 const RED = Colors.red;
 const BLACK = Colors.black;
+const TEXT = Color(0xFF757575);
 
 
 const TRANSPARENT = Colors.transparent;

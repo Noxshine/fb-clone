@@ -29,17 +29,9 @@ class HomeAppBarTitleState extends State<HomeAppBarTitle>{
   Widget build(BuildContext context) {
     return Row(
         children: [
-          Container(
-            alignment: Alignment.centerLeft,
-            child: TextButton(
-              // style: TextButton.styleFrom(
-              //   foregroundColor: Colors.black,
-              // ),
-              child: const Text( 'Anti fb', style: TextStyle(color: CYAN, fontSize: 20, fontWeight: FontWeight.bold,),),
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/home');
-              },
-            ),
+          const Text(
+            'facebook',
+            style: TextStyle(color: FBBLUE, fontSize: 24.0, fontWeight: FontWeight.bold, letterSpacing: -1.2,),
           ),
           Padding(
               padding: const EdgeInsets.only(left: 10), //

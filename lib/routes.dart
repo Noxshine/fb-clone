@@ -1,7 +1,7 @@
 
 
 import 'package:anti_fb/ui/homepage/home_screen.dart';
-import 'package:anti_fb/ui/homepage/homepage/createpost_screen.dart';
+import 'package:anti_fb/ui/homepage/homepage/createpost/createpost_screen.dart';
 import 'package:anti_fb/ui/homepage/menupage/personalpage/personal_page.dart';
 import 'package:anti_fb/ui/signup/signup_screen.dart';
 import 'package:flutter/material.dart';

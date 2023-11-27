@@ -73,7 +73,7 @@ class HomeState extends State<HomeScreen> {
             ],
             currentIndex: _selectedIndex,
             onTap: _onItemTapped,
-            selectedItemColor: CYAN,
+            selectedItemColor: FBBLUE,
             unselectedItemColor: GREY, // Set unselected icon color to grey
           )
       )

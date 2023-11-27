@@ -50,7 +50,7 @@ class _PasswordState extends State<SignupForm5>{
     return Column(
       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const TextWidget(text: "Setup your password", fontSize: 20, textColor: CYAN),
+        const TextWidget(text: "Setup your password", fontSize: 20, textColor: FBBLUE),
         Container(
           width: double.infinity,
           padding: const EdgeInsets.only(top: 15.0),
@@ -81,7 +81,7 @@ class _PasswordState extends State<SignupForm5>{
         ),
 
         ElevatedButtonWidget(buttonText: 'Next', paddingTop: 10.0, textColor: WHITE,
-            backgroundColor: CYAN,
+            backgroundColor: FBBLUE,
             onPressed: () async {
               if(pw.text == ''){
                 showNeedProvidePasswordNotification(context);

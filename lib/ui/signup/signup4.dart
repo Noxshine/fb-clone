@@ -51,7 +51,7 @@ class _EmailState extends State<SignupForm4>{
     return Column(
       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const TextWidget(text: "Enter your email", fontSize: 20, textColor: CYAN),
+        const TextWidget(text: "Enter your email", fontSize: 20, textColor: FBBLUE),
         const TextWidget(text: "Enter the email where you can be contacted. "
             "No one will see this on your profile.", fontSize: 12, textColor: GREY,
         paddingTop: 10),
@@ -65,7 +65,7 @@ class _EmailState extends State<SignupForm4>{
         ),
 
         ElevatedButtonWidget(buttonText: 'Next', paddingTop: 10.0, textColor: WHITE,
-            backgroundColor: CYAN,
+            backgroundColor: FBBLUE,
             onPressed: () {
               if (!isValidEmail(emailController.text)) {
                 errorInvalidEmail();

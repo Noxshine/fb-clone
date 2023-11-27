@@ -64,7 +64,7 @@ class LoginForm extends StatelessWidget{
             TextFieldWidget(labelText: 'Password',  paddingTop: 7.0, controller: passwordController, obscureText: true),
 
             ElevatedButtonWidget(buttonText: 'Login', paddingTop: 7.0, textColor: WHITE,
-                backgroundColor: CYAN,
+                backgroundColor: FBBLUE,
                 onPressed: () async{
                   if(emailController.text == '' || passwordController.text == ''){
                     showNeedToEnterEmailAndPasswordNotification(context);
@@ -87,7 +87,7 @@ class LoginForm extends StatelessWidget{
 
             TextButtonWidget(buttonText: 'Forgot password?', paddingTop: 5, textColor: BLACK, backgroundColor: TRANSPARENT,
                   onPressed: (){ Navigator.pushNamed(context, '/signup');}),
-            ElevatedButtonWidget(buttonText: 'Signup new account', paddingTop: 100.0, textColor: CYAN,
+            ElevatedButtonWidget(buttonText: 'Signup new account', paddingTop: 100.0, textColor: FBBLUE,
                 backgroundColor: WHITE,
                 onPressed: (){ Navigator.pushNamed(context, '/signup');}),
 

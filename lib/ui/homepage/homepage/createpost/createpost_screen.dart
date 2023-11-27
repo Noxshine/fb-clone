@@ -5,9 +5,12 @@ import 'package:anti_fb/models/post/CreatePostData.dart';
 import 'package:anti_fb/widgets/TextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:video_player/video_player.dart';
 
-import '../../../constants.dart';
-import '../../../data/post/addpost_api.dart';
+import '../../../../constants.dart';
+import '../../../../data/post/addpost_api.dart';
+import 'ImageUpWidget.dart';
+
 
 
 class CreatePostScreen extends StatefulWidget {
@@ -24,6 +27,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   TextEditingController textController = TextEditingController();
   ValueNotifier<List<XFile>> imagesNotifier = ValueNotifier<List<XFile>>([]);
+  ValueNotifier<XFile> videoNotifier = ValueNotifier<XFile>(XFile(''));
 
   @override
   void initState() {
@@ -33,7 +37,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     textController.addListener(() {
       setState(() {
         if (textController.text != '' || createPostData.images != []) {
-          postButtonBackgroundColor = CYAN; // Change button color
+          postButtonBackgroundColor = FBBLUE; // Change button color
         } else {
           postButtonBackgroundColor = GREY; // Reset button color
         }
@@ -49,6 +53,16 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
     createPostData.images = pickedImages;
     imagesNotifier.value = pickedImages;
+  }
+
+  Future<void> pickVideo() async {
+    final ImagePicker picker = ImagePicker();
+
+    // Open the image picker to select multiple images
+    final XFile? pickedVideo = await picker.pickVideo(source: ImageSource.gallery);
+
+    createPostData.video = pickedVideo;
+
   }
   @override
   Widget build(BuildContext context) {
@@ -83,15 +97,29 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         body: SingleChildScrollView(
           child: Column (
             children: <Widget>[
+
               Container(
-                padding :const EdgeInsets.only(), width: double.infinity, height: 50,
-                child:
-                  Container(
-                    padding: const EdgeInsets.only(left: 100),
-                    child: IconButton(
+                padding :const EdgeInsets.only(), width: double.infinity, height: 30,
+                child: Row(
+                  children: [
+                    const TextWidget(text: 'Choose images', fontSize: 12, width: 100,),
+                    IconButton(
                       icon: const Icon( Icons.image,),
                       onPressed: () async { await pickImages();},
                     )
+                  ]
+                )
+              ),
+              Container(
+                  padding :const EdgeInsets.only(), width: double.infinity, height: 30,
+                  child: Row(
+                      children: [
+                        const TextWidget(text: 'Choose video', fontSize: 12, width: 100,),
+                        IconButton(
+                          icon: const Icon( Icons.video_file,),
+                          onPressed: () async { await pickVideo();},
+                        )
+                      ]
                   )
               ),
               Container(
@@ -126,7 +154,22 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       return ImageUploadWidget(images: images); // Pass the images to the widget
                     },
                   ),
-                )
+                ),
+              Container(
+                height: 300,
+                padding :const EdgeInsets.only(left: 5),
+                child: ValueListenableBuilder<XFile?>(
+                  valueListenable: videoNotifier,
+                  builder: (context, videoFile, _) {
+                    if (videoFile == null) {
+                      return const Text('No video selected.');
+                    } else {
+                      return const Text('1 video selected.');
+                      // return VideoPlayerWidget(videoFile: videoFile);
+                    }
+                  },
+                ),
+              )
             ]
           )
         )
@@ -134,42 +177,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 }
 
-
-class ImageUploadWidget extends StatefulWidget {
-  final List<XFile> images;
-  const ImageUploadWidget({required this.images, Key? key}) : super(key: key);
-
-  @override
-  State<ImageUploadWidget> createState() => _ImageUploadWidgetState();
-}
-
-class _ImageUploadWidgetState extends State<ImageUploadWidget> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children:[
-        Expanded(
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // Adjust the number of images per row as needed
-            ),
-            itemCount: widget.images.length,
-            itemBuilder: (context, index) {
-              return Image.file(File(widget.images[index].path));
-            },
-              // AssetImage('assets/images/messi-world-cup.png')
-          ),
-        ),
-
-      ],
-    );
-  }
-}
 
 // alert dialog
 void _showDiscardNotification(BuildContext context) {
