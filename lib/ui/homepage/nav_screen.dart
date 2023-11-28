@@ -1,4 +1,5 @@
 
+import 'package:anti_fb/ui/homepage/peoplepage/people_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/custom_tab_bar.dart';
@@ -69,7 +70,7 @@ class _NavScreenState extends State<NavScreen> with TickerProviderStateMixin {
 
     final List<Widget> screens = [
       HomePage(email: email, coin: coin),
-
+      const PeoplePage(),
       const NotificationPage(),
       const MenuPage(),
       // const PersonalPage(),
