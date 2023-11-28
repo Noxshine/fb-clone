@@ -18,6 +18,7 @@ const storage = FlutterSecureStorage();
 // }
 
 void saveUser(User user){
+  print(user.token);
   storage.write(key: 'id', value: user.id);
   storage.write(key: 'email', value: user.email );
   storage.write(key: 'username', value: user.username );

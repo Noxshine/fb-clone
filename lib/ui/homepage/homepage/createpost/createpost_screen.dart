@@ -1,11 +1,8 @@
 
-import 'dart:io';
-
 import 'package:anti_fb/models/post/CreatePostData.dart';
 import 'package:anti_fb/widgets/TextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:video_player/video_player.dart';
 
 import '../../../../constants.dart';
 import '../../../../data/post/addpost_api.dart';
@@ -82,7 +79,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               const Center( child: Text('Create post',style: TextStyle( color: BLACK,),),),
               TextButton(
                 style: TextButton.styleFrom( backgroundColor: postButtonBackgroundColor, ),
-                child: const Text( "Post", style: TextStyle(color: BLACK),),
+                child: const Text( "Post", style: TextStyle(color: WHITE),),
                 onPressed: () async {
                   createPostData.described = textController.text;
 

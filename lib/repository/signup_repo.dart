@@ -1,6 +1,6 @@
 
 
-import 'package:anti_fb/models/request/SignupData.dart';
+import 'package:anti_fb/models/request/ReqSignupData.dart';
 
 import '../data/auth/signup_api.dart';
 import '../storage.dart';

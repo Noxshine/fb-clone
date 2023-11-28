@@ -59,6 +59,9 @@ class HomeState extends State<HomeScreen> {
 
     ];
 
+    late PageController pageController;
+    late TabController tabController;
+
     // double _appBarBottomBtnPosition = MediaQuery.of(context).size.height - 105; //ch
 
     // TODO: implement build

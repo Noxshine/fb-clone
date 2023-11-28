@@ -6,7 +6,7 @@ import 'package:anti_fb/widgets/TextFieldWidget.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
-import '../../models/request/LoginData.dart';
+import '../../models/request/ReqLoginData.dart';
 import '../../widgets/AlertDialogWidget.dart';
 
 class LoginScreen extends StatelessWidget{

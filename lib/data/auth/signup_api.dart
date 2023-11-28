@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:anti_fb/models/request/SignupData.dart';
+import 'package:anti_fb/models/request/ReqSignupData.dart';
 import 'package:http/http.dart' as http;
 
 import '../../constants.dart';

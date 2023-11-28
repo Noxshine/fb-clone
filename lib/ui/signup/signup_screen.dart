@@ -1,4 +1,4 @@
-import 'package:anti_fb/models/request/SignupData.dart';
+import 'package:anti_fb/models/request/ReqSignupData.dart';
 import 'package:anti_fb/storage.dart';
 import 'package:anti_fb/ui/signup/signup1.dart';
 import 'package:anti_fb/ui/signup/signup4.dart';
