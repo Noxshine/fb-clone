@@ -13,7 +13,7 @@ class CustomTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white,
+      color: WHITE,
       child: TabBar(
         controller: controller,
         indicatorPadding: EdgeInsets.zero,

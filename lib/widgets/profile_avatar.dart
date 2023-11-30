@@ -36,7 +36,7 @@ class ProfileAvatar extends StatelessWidget {
               shape: BoxShape.circle,
               border: Border.all(
                 width: 2.0,
-                color: Colors.white,
+                color: WHITE,
               ),
             ),
           ),
