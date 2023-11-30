@@ -1,6 +1,4 @@
 
-
-
 // List of posts
 import 'package:anti_fb/models/post/PostListData.dart';
 import 'package:anti_fb/models/request/ReqListPostData.dart';
@@ -8,7 +6,6 @@ import 'package:anti_fb/repository/post/getlistpost_repo.dart';
 import 'package:anti_fb/ui/homepage/homepage/postpage/post_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:readmore/readmore.dart';
 
 import '../../../constants.dart';
@@ -152,7 +149,7 @@ class PostWidget extends StatelessWidget {
 
           Container(
               height: 30,
-              padding: const EdgeInsets.only(left: 10),
+              padding: const EdgeInsets.only(left: 5),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -160,90 +157,29 @@ class PostWidget extends StatelessWidget {
                       padding : const EdgeInsets.only(left: 10),
                       child: Row(
                         children: [
-                          Row (
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(4.0),
-                                decoration: const BoxDecoration( color: FBBLUE, shape: BoxShape.circle,),
-                                child: const Icon( Icons.thumb_up, size: 10.0, color: WHITE,),
-                              ),
-                              const TextWidget(text: '10', textColor: FBBLUE ,fontSize: 10, paddingLeft: 5, width: 30,)
-                            ],
+                          TextWidget(text: feel, textColor: GREY ,fontSize: 12, width: 12,),
+                          Container(
+                            padding: const EdgeInsets.all(4.0),
+                            decoration: const BoxDecoration( color: FBBLUE, shape: BoxShape.circle,),
+                            child: const Icon( Icons.thumb_up, size: 10.0, color: WHITE,),
                           ),
-                          Row (
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(4.0),
-                                decoration: const BoxDecoration( color: RED, shape: BoxShape.circle,),
-                                child: const Icon( Icons.thumb_down, size: 10.0, color: WHITE,),
-                              ),
-                              const TextWidget(text: '10', textColor: RED ,fontSize: 10, paddingLeft: 5, width: 30,)
-                            ],
+                          Container(
+                            padding: const EdgeInsets.all(4.0),
+                            decoration: const BoxDecoration( color: RED, shape: BoxShape.circle,),
+                            child: const Icon( Icons.thumb_down, size: 10.0, color: WHITE,),
                           ),
                         ],
                       ),
                     ),
                     Container(
                       padding : const EdgeInsets.only(right: 10),
-                      child : Text('Mark', style: TextStyle(color: GREY[600]),),
+                      child : Text('$comment_mark Mark', style: TextStyle(color: GREY[600]),),
                     )
                   ]
               )
           ),
           const Divider( thickness: 0.1, color: GREY, ),
-          SizedBox(
-              height : 30,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Container(
-                    //     padding: const EdgeInsets.only(left: 10),
-                    //     child : GestureDetector(
-                    //       onTap: (){ setState(() {
-                    //         if(!disChoose){ kudosChoose = !kudosChoose;}
-                    //       });},
-                    //       child: Row (
-                    //         children: [
-                    //           Icon( Icons.sentiment_satisfied_alt, color: kudosChoose ? FBBLUE : GREY ,),
-                    //           TextWidget(text: 'Kudos', textColor: kudosChoose ? FBBLUE : GREY,fontSize: 12, paddingLeft: 5, width: 50,)
-                    //         ],
-                    //       ),
-                    //     )
-                    // ),
-                    // GestureDetector(
-                    //   onTap: (){ setState(() {
-                    //     if(!kudosChoose){ disChoose = !disChoose;}
-                    //   });},
-                    //   child: Row (
-                    //     children: [
-                    //       Icon( Icons.sentiment_dissatisfied_sharp, color: disChoose ? RED : GREY ,),
-                    //       TextWidget(text: 'Dissapoint', textColor: disChoose ? RED : GREY,fontSize: 12, paddingLeft: 5, width: 70,)
-                    //     ],
-                    //   ),
-                    // ),
-                    Container(
-                        padding: const EdgeInsets.only(right: 10),
-                        child : GestureDetector(
-                          onTap: (){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PostScreen(id: id,),
-                              ),
-                            );
-                          },
-                          child: const Row (
-                            children: [
-                              Icon( Icons.comment, color: GREY,),
-                              TextWidget(text: 'Mark', textColor: GREY,fontSize: 12, paddingLeft: 5, width: 40,)
-                            ],
-                          ),
-                        )
-                    ),
-                  ]
-              )
-          )
-
+          _PostBottom(id: id, is_felt: is_felt)
         ],
       ),
     );
@@ -302,3 +238,114 @@ class _PostHeader extends StatelessWidget {
   }
 }
 
+
+class _PostBottom extends StatefulWidget{
+  const _PostBottom({super.key, required this.id, required this.is_felt});
+
+  final String id;
+  final String is_felt;
+
+
+  @override
+  State<_PostBottom> createState() => _PostBottomState();
+}
+
+class _PostBottomState extends State<_PostBottom>{
+
+  late bool kudosChoose;
+  late bool disChoose;
+
+  @override
+  void initState() {
+    super.initState();
+    String is_felt = widget.is_felt;
+
+    kudosChoose = false;
+    disChoose = false;
+
+    if(is_felt == '0') {
+      kudosChoose = true;
+    } else if (is_felt == '1'){
+      disChoose = true;
+    }
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        height: 30,
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (!disChoose) {
+                          kudosChoose = !kudosChoose;
+                        }
+                      });
+                    },
+                    child: Row(
+                      children: [
+                        Icon(Icons.sentiment_satisfied_alt,
+                          color: kudosChoose ? FBBLUE : GREY,),
+                        TextWidget(text: 'Kudos',
+                          textColor: kudosChoose ? FBBLUE : GREY,
+                          fontSize: 12,
+                          paddingLeft: 5,
+                          width: 50,)
+                      ],
+                    ),
+                  )
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if (!kudosChoose) {
+                      disChoose = !disChoose;
+                    }
+                  });
+                },
+                child: Row(
+                  children: [
+                    Icon(Icons.sentiment_dissatisfied_sharp,
+                      color: disChoose ? RED : GREY,),
+                    TextWidget(text: 'Dissapoint',
+                      textColor: disChoose ? RED : GREY,
+                      fontSize: 12,
+                      paddingLeft: 5,
+                      width: 70,)
+                  ],
+                ),
+              ),
+              Container(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PostScreen(id: widget.id,),
+                        ),
+                      );
+                    },
+                    child: const Row (
+                      children: [
+                        Icon(Icons.comment, color: GREY,),
+                        TextWidget(text: 'Mark',
+                          textColor: GREY,
+                          fontSize: 12,
+                          paddingLeft: 5,
+                          width: 40,)
+                      ],
+                    ),
+                  )
+              ),
+            ]
+        )
+    );
+  }
+}
