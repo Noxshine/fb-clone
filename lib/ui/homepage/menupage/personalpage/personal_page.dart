@@ -1,14 +1,8 @@
 
-
-
-
 import 'package:flutter/material.dart';
 
 import '../../../../constants.dart';
-import '../../../../widgets/icon/IconSearchWidget.dart';
-import '../../../../widgets/icon/IconSettingWidget.dart';
-import '../../home_screen.dart';
-
+import '../../../../widgets/IconWidget.dart';
 
 class PersonalPage extends StatelessWidget{
   const PersonalPage({super.key});
@@ -18,13 +12,18 @@ class PersonalPage extends StatelessWidget{
 
     return CustomScrollView(
         slivers: <Widget>[
-          const SliverAppBar(
+          SliverAppBar(
             title: PersonalAppBarTitle(),
             actions:  [
               Row(
                 children: [
-                  IconSettingWidget(),
-                  Padding( padding: EdgeInsets.only(right: 5), child: IconSearchWidget()
+                  IconWidget(icon: Icons.settings, onPressed: () { },),
+                  Padding( padding: const EdgeInsets.only(right: 5), child: IconWidget(
+                    icon: Icons.search,
+                    onPressed: (){
+
+                    },
+                  )
                   ),
                 ],
               ),

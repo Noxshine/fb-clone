@@ -2,27 +2,30 @@ import 'package:anti_fb/ui/homepage/notificationpage/user_notification.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
-import '../../../widgets/icon/IconSearchWidget.dart';
-import '../../../widgets/icon/IconSettingWidget.dart';
+import '../../../widgets/IconWidget.dart';
 import 'NotificationWidget.dart';
 
 
 class NotificationPage extends StatelessWidget{
-  const NotificationPage({super.key});
+  final ScrollController scrollController;
+  const NotificationPage({super.key, required this.scrollController});
 
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
+      controller: scrollController,
       slivers: <Widget>[
-        const SliverAppBar(
-          title: NotificationsAppBarTitle(),
+        SliverAppBar(
+          title: const NotificationsAppBarTitle(),
           actions:  [
             Row(
               children: [
-                IconSettingWidget(),
+                IconWidget(icon: Icons.settings, onPressed: () {},),
                 Padding(
-                    padding: EdgeInsets.only(right: 5), //
-                    child: IconSearchWidget()
+                    padding: const EdgeInsets.only(right: 5), //
+                    child: IconWidget( icon: Icons.search,
+                      onPressed: (){},
+                    )
                 ),
               ],
             ),

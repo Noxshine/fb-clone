@@ -4,7 +4,7 @@ import 'package:anti_fb/models/request/ReqListPost_VideoData.dart';
 import 'package:anti_fb/repository/post/post_repo.dart';
 import 'package:anti_fb/ui/homepage/homepage/postpage/post_screen.dart';
 import 'package:anti_fb/ui/homepage/homepage/reaction_button.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:anti_fb/widget_dung/imageViewWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 import 'package:readmore/readmore.dart';
@@ -13,7 +13,7 @@ import '../../../constants.dart';
 import '../../../models/post/ImageData.dart';
 import '../../../widgets/TextWidget.dart';
 import '../../../widgets/profile_avatar.dart';
-import '../home_screen.dart';
+import '../nav_screen.dart';
 
 class ListPostWidget extends StatefulWidget {
   const ListPostWidget({super.key, required this.postlists});
@@ -32,29 +32,38 @@ class _ListPostWidgetState extends State<ListPostWidget> {
   final PostRepository _postRepository = PostRepository();
 
   static final RequestListPost_VideoData requestListPostData =
-  RequestListPost_VideoData("1", "1", "1", "1.0", "1.0", "6", "60", "10");
+  RequestListPost_VideoData(null, "1", "1", "1.0", "1.0", null, "0", "10");
 
   Future<void> getlistpost() async {
+
+    await Future.delayed(const Duration(seconds: 2));
+
     try {
       List<PostListData>? listPost =
           await _postRepository.getlistpost(requestListPostData);
+    setState(() {
       for (int i = 0; i < listPost!.length; i++) {
         PostListData curPost = listPost[i];
         listPostsWidget.add(PostWidget(
-            curPost.id,
-            curPost.name,
-            curPost.image,
-            curPost.described,
-            curPost.created,
-            curPost.feel,
-            curPost.comment_mark,
-            curPost.is_felt,
-            curPost.author.name,
-            curPost.author.avatar));
+        curPost.id,
+        curPost.name,
+        curPost.image,
+        curPost.described,
+        curPost.created.substring(0, 10),
+        curPost.feel,
+        curPost.comment_mark,
+        curPost.is_felt,
+        curPost.author.name,
+        curPost.author.avatar));
       }
-      final HomeState? homeState =
-          context.findAncestorStateOfType<HomeState>();
-      homeState?.postlist = listPost;
+      if(mounted) {
+        final HomeState? homeState =
+        context.findAncestorStateOfType<HomeState>();
+        homeState?.postlist = listPost;
+      }
+    });
+
+
     } catch (error) {
       print(error);
     }
@@ -65,29 +74,24 @@ class _ListPostWidgetState extends State<ListPostWidget> {
     super.initState();
     _postlists = widget.postlists;
 
-    setState(() {
-      if (_postlists.isEmpty) {
-        getlistpost();
-      } else {
-        for (int i = 0; i < _postlists.length; i++) {
-          PostListData curPost = _postlists[i];
-          listPostsWidget.add(PostWidget(
-              curPost.id,
-              curPost.name,
-              curPost.image,
-              curPost.described,
-              curPost.created,
-              curPost.feel,
-              curPost.comment_mark,
-              curPost.is_felt,
-              curPost.author.name,
-              curPost.author.avatar));
-        }
-      }
-
-    });
-
-
+     if (_postlists.isEmpty) {
+       getlistpost();
+     } else {
+       for (int i = 0; i < _postlists.length; i++) {
+         PostListData curPost = _postlists[i];
+         listPostsWidget.add(PostWidget(
+             curPost.id,
+             curPost.name,
+             curPost.image,
+             curPost.described,
+             curPost.created.substring(0, 10),
+             curPost.feel,
+             curPost.comment_mark,
+             curPost.is_felt,
+             curPost.author.name,
+             curPost.author.avatar));
+       }
+     }
   }
 
   @override
@@ -111,10 +115,9 @@ class PostWidget extends StatelessWidget {
   final String comment_mark;
   final String is_felt;
   final String author_name;
-
   final String author_avatar_url;
 
-  PostWidget(
+  const PostWidget(
       this.id,
       this.name,
       this.images,
@@ -140,11 +143,7 @@ class PostWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _PostHeader(
-                  imageUrl: author_avatar_url,
-                  email: author_name,
-                  timestamp: created,
-                ),
+                PostHeader( imageUrl: author_avatar_url, email: author_name, timestamp: created,),
                 const SizedBox(height: 4.0),
                 // _PostCaption(caption: post.caption,),
                 ReadMoreText(
@@ -163,28 +162,8 @@ class PostWidget extends StatelessWidget {
           ),
 
           // ----------------------------
-          images != []
-              ? SizedBox(
-                  height: 200,
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount:
-                          4, // Adjust the number of images per row as needed
-                    ),
-                    itemCount: images.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: CachedNetworkImage(
-                          imageUrl: images[index].url,
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
-                      );
-                    },
-                  ))
+          (images.isNotEmpty)
+              ? ImageWidget(images: images)
               : const SizedBox.shrink(),
           // ------------------------------
 
@@ -198,23 +177,14 @@ class PostWidget extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 10),
                       child: Row(
                         children: [
-                          TextWidget(
-                            text: feel,
-                            textColor: GREY,
-                            fontSize: 12,
-                            width: 12,
-                          ),
+                          TextWidget( text: feel, textColor: GREY, fontSize: 12, width: 12,),
                           Container(
                             padding: const EdgeInsets.all(4.0),
                             decoration: const BoxDecoration(
                               color: FBBLUE,
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(
-                              Icons.thumb_up,
-                              size: 10.0,
-                              color: WHITE,
-                            ),
+                            child: const Icon( Icons.thumb_up, size: 10.0, color: WHITE, ),
                           ),
                           Container(
                             padding: const EdgeInsets.all(4.0),
@@ -222,11 +192,7 @@ class PostWidget extends StatelessWidget {
                               color: RED,
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(
-                              Icons.thumb_down,
-                              size: 10.0,
-                              color: WHITE,
-                            ),
+                            child: const Icon( Icons.thumb_down, size: 10.0, color: WHITE,),
                           ),
                         ],
                       ),
@@ -243,20 +209,22 @@ class PostWidget extends StatelessWidget {
             thickness: 0.1,
             color: GREY,
           ),
-          _PostBottom(id, is_felt)
+          _PostBottom(id: id, name: name, images : images, described: described, created: created,
+              feel: feel, comment_mark: comment_mark, is_felt: is_felt, author_name: author_name,
+              author_avatar_url : author_avatar_url)
         ],
       ),
     );
   }
 }
 
-class _PostHeader extends StatelessWidget {
+class PostHeader extends StatelessWidget {
   final String imageUrl;
   final String email;
   final String timestamp;
 
-  const _PostHeader(
-      {required this.imageUrl, required this.email, required this.timestamp});
+  const PostHeader(
+      {super.key, required this.imageUrl, required this.email, required this.timestamp});
 
   @override
   Widget build(BuildContext context) {
@@ -296,29 +264,42 @@ class _PostHeader extends StatelessWidget {
 
 class _PostBottom extends StatelessWidget {
 
-  const _PostBottom(this.id, this.is_felt);
+  const _PostBottom({required this.id, required this.name, required this.images,
+    required this.described, required this.created, required this.feel,
+    required this.comment_mark, required this.is_felt, required this.author_name,
+    required this.author_avatar_url});
 
   final String id;
+  final String name;
+  final List<ImageData> images;
+  final String described;
+  final String created;
+  final String feel;
+  final String comment_mark;
   final String is_felt;
-
-
+  final String author_name;
+  final String author_avatar_url;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Container(
           padding: const EdgeInsets.only(left: 30),
           child: ReactionButton<String>(
-            toggle: false,
-            direction: ReactionsBoxAlignment.rtl,
+            // direction: ReactionsBoxAlignment.rtl,
             onReactionChanged: (Reaction<String>? reaction) {
-
+              if(reaction?.value == 'kudos'){
+                //send api kudos
+              } else {
+                // send api diss
+              }
             },
             reactions: reaction,
-            placeholder:
-              reaction[int.parse(is_felt) + 1],
+            placeholder: notReact,
+            selectedReaction: kudosReact,
+
             // boxColor: Colors.black.withOpacity(0.5),
             boxRadius: 20,
             itemsSpacing: 10,
@@ -332,18 +313,17 @@ class _PostBottom extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PostScreen(id: id,),
+                    builder: (context)
+                    => PostScreen(id: id, name: name, images: images, described: described,
+                        created: created, feel: feel, comment_mark: comment_mark,
+                        is_felt: is_felt, author_name: author_name, author_avatar_url: author_avatar_url),
                   ),
                 );
               },
               child: const Row (
                 children: [
                   Icon(Icons.comment, color: GREY,),
-                  TextWidget(text: 'Mark',
-                    textColor: GREY,
-                    fontSize: 12,
-                    paddingLeft: 5,
-                    width: 40,)
+                  TextWidget(text: 'Mark', textColor: GREY, fontSize: 12, paddingLeft: 5,  width: 40,)
                 ],
               ),
             )

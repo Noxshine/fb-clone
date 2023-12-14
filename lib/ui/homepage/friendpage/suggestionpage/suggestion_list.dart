@@ -1,51 +1,65 @@
 
-import 'package:anti_fb/models/friend/FriendSuggestion.dart';
 import 'package:anti_fb/repository/friend/friend_repo.dart';
 import 'package:anti_fb/widgets/TextButtonWidget.dart';
+import 'package:anti_fb/widgets/TextWidget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../constants.dart';
+import '../../../../models/friend/Friend.dart';
 
 
 class SuggestionList extends StatefulWidget {
 
-  const SuggestionList({super.key});
+  SuggestionList({super.key});
+  final FriendRepository _friendRepository = FriendRepository();
+  late List<SuggestionWidget> suggestedWidgetList = [];
 
   @override
   State<SuggestionList> createState() => _SuggestionListState();
 }
 
 class _SuggestionListState extends State<SuggestionList> {
-  final FriendRepository _friendSuggestionRepository = FriendRepository();
 
-  late List<SuggestionWidget> suggestionWidgetList = [] ;
+  @override
+  void initState() {
+    super.initState();
+    widget.suggestedWidgetList = [];
+    getFriendSuggest();
+  }
+
+  void removeItem(String id){
+    setState(() {
+      widget.suggestedWidgetList.removeWhere((obj) => obj.id == id);
+    });
+  }
 
   Future<void> getFriendSuggest() async {
     try {
-      List<FriendSuggestion>? listSuggest =
-      await _friendSuggestionRepository.getfriendsuggestion('0', '5');
-      for (int i = 0; i < listSuggest!.length; i++) {
-        FriendSuggestion curSuggest = listSuggest[i];
-        suggestionWidgetList.add(SuggestionWidget(
-          curSuggest.id, curSuggest.username, curSuggest.avatar, curSuggest.same_friends
-        ));
-      }
-    } catch (e){
+      List<Friend>? suggestList =
+      await widget._friendRepository.getfriendsuggestion('0', '5');
+
+      setState(() {
+        widget.suggestedWidgetList = suggestList
+            ?.map((curSuggest) => SuggestionWidget(
+          curSuggest.id,
+          curSuggest.username,
+          curSuggest.avatar,
+          curSuggest.sameFriends,
+        ))
+            .toList() ??
+            [];
+      });
+    } catch (e) {
+      print("error fetching friend suggestions");
       print(e);
     }
   }
 
   @override
-  void initState() {
-    super.initState();
-    setState(() { getFriendSuggest();});
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Column(
-        children: suggestionWidgetList
+        children: widget.suggestedWidgetList
     );
   }
 
@@ -56,6 +70,7 @@ class SuggestionWidget extends StatelessWidget {
   final String username;
   final String avatar;
   final String same_friends;
+
 
   const SuggestionWidget(this.id, this.username, this.avatar, this.same_friends, {super.key});
 
@@ -83,20 +98,8 @@ class SuggestionWidget extends StatelessWidget {
                     fontSize: 13.0, fontWeight: FontWeight.bold)),
                 Text('$same_friends mutual friends', style: const TextStyle(
                     fontSize: 11.0, fontWeight: FontWeight.bold, color: GREY)),
-                Row(
-                  children: [
-                    TextButtonWidget(buttonText: 'Add friend', textColor: WHITE, backgroundColor: FBBLUE,
-                        radiusRoundBorder : 5,
-                        onPressed: (){
+                _ButtonWidget(id)
 
-                        }),
-                    TextButtonWidget(buttonText: 'Remove', textColor: BLACK, backgroundColor: GREY,
-                        radiusRoundBorder : 5, paddingLeft: 10,
-                        onPressed: (){
-
-                        }),
-                    ],
-                )
               ],
             ),
           ),
@@ -108,4 +111,79 @@ class SuggestionWidget extends StatelessWidget {
 
   }
 
+
+}
+
+class _ButtonWidget extends StatefulWidget{
+  _ButtonWidget(this.id);
+  @override
+  State<_ButtonWidget> createState() => _ButtonWidgetState();
+  final FriendRepository friendRepository = FriendRepository();
+  final String id;
+}
+
+class _ButtonWidgetState extends State<_ButtonWidget>{
+
+  late Widget displayedWidget;
+  late String id = widget.id;
+
+  @override
+  void initState(){
+    super.initState();
+    changeWidget0();
+  }
+
+  void sentRequest()async{
+    changeWiget1();
+    await widget.friendRepository.setRequestFriend(id);
+  }
+  void cancelRequest()async{
+    changeWidget0();
+    await widget.friendRepository.delRequestFriend(id);
+  }
+  
+  void changeWidget0(){
+    setState(() {
+      displayedWidget = Row(
+        children: [
+          TextButtonWidget(buttonText: 'Add friend', textColor: WHITE, backgroundColor: FBBLUE,
+              radiusRoundBorder : 5,
+              onPressed: () async {
+                await widget.friendRepository.setRequestFriend(id);
+                sentRequest();
+              }),
+          TextButtonWidget(buttonText: 'Remove', textColor: BLACK, backgroundColor: GREY,
+              radiusRoundBorder : 5, paddingLeft: 10,
+              onPressed: (){
+                handleDelSuggestion(context, id);
+              }),
+        ],
+      );
+    });
+  }
+  void changeWiget1(){
+    setState(() {
+      displayedWidget = Row(
+        children: [
+          const TextWidget(text: "Sent", fontSize: 10, width: 50,),
+          TextButtonWidget(buttonText: 'Cancel', textColor: BLACK,
+              backgroundColor: GREY,radiusRoundBorder : 5,
+              onPressed: () async {
+                cancelRequest();
+                await widget.friendRepository.delRequestFriend(id);
+              })
+        ],
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return displayedWidget;
+  }
+}
+
+void handleDelSuggestion(BuildContext context, String id) {
+  final _SuggestionListState? listState = context.findAncestorStateOfType<_SuggestionListState>();
+  listState?.removeItem(id);
 }
