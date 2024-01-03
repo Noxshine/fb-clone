@@ -1,35 +1,32 @@
-
-
-import 'package:anti_fb/ui/signup/signup_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
 import '../../api/auth/getverifycode_api.dart';
-import '../../widgets/AlertDialogWidget.dart';
 import '../../widgets/ElevatedButtonWidget.dart';
 import '../../widgets/TextWidget.dart';
 
-
-class SignupForm6 extends StatelessWidget{
-
+class SignupForm6 extends StatelessWidget {
   final String email;
   final String verifyCode;
-  const SignupForm6(this.email, this.verifyCode,{super.key});
+
+  const SignupForm6(this.email, this.verifyCode, {super.key});
 
   @override
   Widget build(BuildContext context) {
-
     TextEditingController verifyCodeController = TextEditingController();
 
-    return Column(
+    return Scaffold(
+        body: Column(
       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        TextWidget(text: "We sent sms code to $email", fontSize: 14, textColor: GREY),
-        TextWidget(text: "Your sms code is $verifyCode", fontSize: 14, textColor: GREY),
-
-        const TextWidget(text: "Enter code have 5 digits", fontSize: 14, textColor: GREY),
-
-
+        TextWidget(
+            text: "We sent sms code to $email", fontSize: 14, textColor: GREY),
+        TextWidget(
+            text: "Your sms code is $verifyCode",
+            fontSize: 14,
+            textColor: GREY),
+        const TextWidget(
+            text: "Enter code have 6 digits", fontSize: 14, textColor: GREY),
         Container(
           padding: const EdgeInsets.only(top: 20),
           child: TextField(
@@ -44,41 +41,34 @@ class SignupForm6 extends StatelessWidget{
               ),
             ),
           ),
-
         ),
-
-        ElevatedButtonWidget(buttonText: 'Confirm', paddingTop: 10.0, textColor: WHITE,
+        ElevatedButtonWidget(
+            buttonText: 'Confirm',
+            paddingTop: 10.0,
+            textColor: WHITE,
             backgroundColor: FBBLUE,
-            onPressed: () async{
-
-              final getverifycode = await GetVerifyCodeApi.checkVerifyCode(email, verifyCodeController.text);
-              if(context.mounted) {
+            onPressed: () async {
+              final getverifycode = await GetVerifyCodeApi.checkVerifyCode(
+                  email, verifyCodeController.text);
+              print(getverifycode);
+              if (context.mounted) {
                 if (!getverifycode) {
-                  showVerifyErrorlNotification(context);
+                  showNotification(context, "Error", "Can't verify");
                 } else {
-                  final SignupState? signupState = context.findAncestorStateOfType<SignupState>();
-                  signupState?.moveFoward();
+                  Navigator.pushNamed(context, '/signupok');
                 }
               }
             }),
-
-        ElevatedButtonWidget(buttonText: "I'm not receive code", paddingTop: 5.0, textColor: FBBLUE,
+        ElevatedButtonWidget(
+            buttonText: "I'm not receive code",
+            paddingTop: 5.0,
+            textColor: FBBLUE,
             backgroundColor: WHITE,
-            onPressed: (){
+            onPressed: () {
               // Navigator.pushNamed(context, '/signup');
             }),
-
-
       ],
-    );
+    ));
   }
 
-  void showVerifyErrorlNotification(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const AlertDialogWidget(title: 'Error', text: 'Can not verify');
-      },
-    );
-  }
 }

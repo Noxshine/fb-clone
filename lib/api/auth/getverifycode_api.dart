@@ -8,7 +8,6 @@ import '../../constants.dart';
 class GetVerifyCodeApi{
   static final Map<String, String> headers = {
     'Content-Type': 'application/json',
-    // Add any additional headers you need
   };
   static Future getVerifyCode(String email) async {
 
@@ -27,10 +26,15 @@ class GetVerifyCodeApi{
   }
 
   static Future<bool> checkVerifyCode(String email, String code) async {
+    final Map<String, String> requestBody = {
+      "email": email,
+      "code_verify": code,
+    };
+
     final response = await http.post(
       Uri.parse('$apiUrl/check_verify_code'),
       headers: headers,
-      body: {"email" : email, "code_verify": code},
+      body: jsonEncode(requestBody),
     );
 
     if (response.statusCode == 200) {

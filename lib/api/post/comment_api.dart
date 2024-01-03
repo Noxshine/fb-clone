@@ -11,15 +11,10 @@ class CommentApi {
   late String token;
   late Map<String, String> headers;
 
-  ReactionApi() {
-    // Initialize headers by fetching the token from secure storage
-  }
+  CommentApi();
 
   Future<void> _initializeHeaders() async {
-    // Fetch the token from secure storage
     token = (await getJwt())!; // Replace with your actual code to get the token
-
-    // Update the headers with the fetched token
     headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
@@ -47,20 +42,23 @@ class CommentApi {
     }
   }
 
-  Future setMarkComment(ReqSetMarkCmtData req) async{
+  Future setMarkComment(ReqSetMarkCmtData req, bool type) async{
     await _initializeHeaders();
-    final String jsonData = jsonEncode(req.toJson());
+    final String jsonData;
+    if(type){
+      jsonData = jsonEncode(req.toJson2());
+    } else {
+      jsonData = jsonEncode(req.toJson1());
+    }
     final response = await http.post(
       Uri.parse('$apiUrl/set_mark_comment'),
       headers: headers,
       body: jsonData,
     );
     if (response.statusCode == 200) {
-      final jsonResponse = json.decode(response.body);
-
-      return jsonResponse; // get list success
+      return true;
     } else {
-      return null; // get list false
+      return false;
     }
   }
 
@@ -106,6 +104,7 @@ class CommentApi {
   }
 
   Future deleteFeel(String id) async{
+    await _initializeHeaders();
     final Map<String, dynamic> requestBody = {
       "id" : id,
     };

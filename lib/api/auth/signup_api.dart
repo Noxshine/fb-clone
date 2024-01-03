@@ -10,7 +10,6 @@ import '../../constants.dart';
 class SignupApi{
   static final Map<String, String> headers = {
     'Content-Type': 'application/json',
-    // Add any additional headers you need
   };
   static Future signup(SignupData signupData) async {
 
@@ -22,7 +21,7 @@ class SignupApi{
       body: jsonData,
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       final jsonResponse = json.decode(response.body);
       return jsonResponse;
     } else {

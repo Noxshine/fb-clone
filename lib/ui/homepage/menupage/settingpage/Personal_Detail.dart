@@ -4,21 +4,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:anti_fb/constants.dart';
 
 class PersonalDetail extends StatelessWidget {
-  const PersonalDetail({super.key});
+  final String name;
+  const PersonalDetail({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: BG,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: WHITE,
       ),
       body: Column(
         children: [
           const SizedBox(height: 4.0),
           Container(
             width: MediaQuery.of(context).size.width,
-            color: Colors.white,
+            color: WHITE,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -33,7 +34,7 @@ class PersonalDetail extends StatelessWidget {
                           child: Text(
                             "Personal Detail",
                             style: TextStyle(
-                                fontSize: 20.0, fontWeight: FontWeight.bold),
+                                fontSize: 20.0, fontWeight: FONTBOLD),
                           ),
                         ),
                       ],
@@ -52,7 +53,7 @@ class PersonalDetail extends StatelessWidget {
                           child: Text(
                             "General  ",
                             style: TextStyle(
-                                fontSize: 17.0, fontWeight: FontWeight.bold),
+                                fontSize: 17.0, fontWeight: FONTBOLD),
                           ),
                         ),
                       ],
@@ -68,7 +69,7 @@ class PersonalDetail extends StatelessWidget {
                           Navigator.push(
                             context,
                             CupertinoPageRoute(
-                                builder: (context) => const ChangeUsername()),
+                                builder: (context) => ChangeUsername(name: name)),
                           );
                         },
                         style: TextButton.styleFrom(
@@ -84,22 +85,22 @@ class PersonalDetail extends StatelessWidget {
                             children: <Widget>[
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.85,
-                                child: const Column(
+                                child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       "Name",
                                       style: TextStyle(
                                           fontSize: 15.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
+                                          fontWeight: FONTBOLD,
+                                          color: BLACK),
                                     ),
                                     Text(
-                                      "Viet Dung",
-                                      style: TextStyle(
-                                          fontSize: 13.0, color: Colors.grey),
+                                      name,
+                                      style: const TextStyle(
+                                          fontSize: 13.0, color: GREY),
                                     )
                                   ],
                                 ),

@@ -10,14 +10,10 @@ class PostApi {
   late String token;
   late Map<String, String> headers = {};
 
-  PostApi() {
-    // Initialize headers by fetching the token from secure storage
-    // _initializeHeaders();
-  }
+  PostApi();
 
   Future<void> _initializeHeaders() async {
-    // Fetch the token from secure storage
-    token = (await getJwt())!; // Replace with your actual code to get the token
+    token = (await getJwt())!;
     headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
@@ -42,18 +38,16 @@ class PostApi {
     }
   }
 
-  Future getListPost(RequestListPost_VideoData requestListPostData) async {
+  Future getListPost(RequestListPost_VideoData req) async {
     await _initializeHeaders();
-    final String jsonData = jsonEncode(requestListPostData.toJson());
+    final String jsonData = jsonEncode(req.toJson());
     final response = await http.post(
       Uri.parse('$apiUrl/get_list_posts'),
       headers: headers,
       body: jsonData,
     );
-
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-
       return jsonResponse; // get list success
     } else {
       return null; // get list false
@@ -87,11 +81,9 @@ class PostApi {
       body: json.encode(requestBody),
     );
     if (response.statusCode == 200) {
-      final jsonResponse = json.decode(response.body);
-
-      return jsonResponse; // get list success
+      return true;
     } else {
-      return null; // get list false
+      return null;
     }
   }
 

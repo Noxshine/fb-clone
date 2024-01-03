@@ -1,17 +1,98 @@
 import 'dart:ui';
-import 'package:flutter/material.dart';
+import 'package:anti_fb/models/request/ReqListBlocked.dart';
+import 'package:anti_fb/repository/block/block_repo.dart';
+import 'package:anti_fb/ui/homepage/menupage/settingpage/search_people/search_people.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:anti_fb/constants.dart';
 
-class BlockScreen extends StatelessWidget {
+import '../../../../models/block/UserBlocked.dart';
+
+class BlockScreen extends StatefulWidget {
   const BlockScreen({super.key});
+
+  @override
+  State<BlockScreen> createState() => _BlockScreenState();
+}
+
+class _BlockScreenState extends State<BlockScreen> {
+  late List<UserBlocked> _userBlocked =[];
+
+  late List<Widget> listUserBlockedWidget = [];
+
+  final BlockRepo _blockRepo = BlockRepo();
+
+  static final RequestListBlock requestListBlock = RequestListBlock("0", "20");
+
+  Future<void> _navigateAndDisplaySelection(BuildContext context) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final result = await Navigator.push(
+      context,
+      CupertinoPageRoute(builder: (context) => SearchUserTab()),
+    );
+
+    // When a BuildContext is used from a StatefulWidget, the mounted property
+    // must be checked after an asynchronous gap.
+    if (!mounted) return;
+
+    // After the Selection Screen returns a result, hide any previous snackbars
+    // and show the new result.
+    if(result == true){
+      print("1234");
+      setState(() {
+        getListBlock();
+      });
+    }
+  }
+
+  Future<void> getListBlock() async{
+    await Future.delayed(const Duration(seconds: 2));
+
+    try{
+      List<UserBlocked>? listBlocked = await _blockRepo.getListBlocked(requestListBlock);
+
+      setState(() {
+        listUserBlockedWidget = [];
+        if(listBlocked != null){
+          _userBlocked = listBlocked;
+          for(int i=0;i<listBlocked.length;i++){
+
+            listUserBlockedWidget.add(BlockedPeople(
+                id: _userBlocked[i].id,
+                imageUrl: _userBlocked[i].avatar,
+                userName: _userBlocked[i].name,
+                blockRepo:_blockRepo,
+                notifyParent: (){
+                  setState(() {
+                    _blockRepo.unBlock(_userBlocked[i].id);
+                    getListBlock();
+                    Navigator.pop(context);
+                  });
+                },
+            ));
+            print("listUserBlockedWidget.length: ${listUserBlockedWidget.length}");
+          }
+        }
+      });
+    }
+    catch(error){
+      print(error);
+    }
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getListBlock();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: BG,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: WHITE,
           title: const Text("Blocking"),
         ),
         body: Column(
@@ -20,7 +101,7 @@ class BlockScreen extends StatelessWidget {
             Expanded(
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                color: Colors.white,
+                color: WHITE,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -44,7 +125,7 @@ class BlockScreen extends StatelessWidget {
                               child: Text(
                                 "Once you block someone, that person can no longer see things you post on your Timeline, tag you, invite you to events or groups, start a conversation with you, or add you as a friend. This doesn't include apps, games or groups you both participate in.",
                                 style: TextStyle(
-                                    fontSize: 13.0, color: Colors.grey),
+                                    fontSize: 13.0, color: GREY),
                               ),
                             ),
                           ],
@@ -56,9 +137,11 @@ class BlockScreen extends StatelessWidget {
                       alignment: Alignment.topLeft,
                       child: Padding(
                         padding:
-                            const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                        const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () async{
+                            _navigateAndDisplaySelection(context);
+                          },
                           style: TextButton.styleFrom(
                             shape: const BeveledRectangleBorder(
                                 borderRadius: BorderRadius.zero),
@@ -91,23 +174,18 @@ class BlockScreen extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: Container(
-                        color: Colors.white,
-                        child: Scrollbar(
-                          child: SingleChildScrollView(
-                            child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: List.generate(
-                                    7,
-                                    (index) => const BlockedPeople(
-                                        imageUrl:
-                                            'assets/images/messi-world-cup.png',
-                                        userName: 'Messi'))),
+                        child: Container(
+                          color: WHITE,
+                          child: Scrollbar(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: listUserBlockedWidget
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    )
-                  ],
+                        )
+                    )],
                 ),
               ),
             )
@@ -116,13 +194,21 @@ class BlockScreen extends StatelessWidget {
   }
 }
 
-class BlockedPeople extends StatelessWidget {
+class BlockedPeople extends StatefulWidget {
+  final String id;
   final String imageUrl;
   final String userName;
+  final VoidCallback notifyParent;
+  final BlockRepo blockRepo;
 
   const BlockedPeople(
-      {super.key, required this.imageUrl, required this.userName});
+      {super.key, required this.imageUrl, required this.userName, required this.id, required this.blockRepo, required this.notifyParent});
 
+  @override
+  State<BlockedPeople> createState() => _BlockedPeopleState();
+}
+
+class _BlockedPeopleState extends State<BlockedPeople> {
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -134,7 +220,7 @@ class BlockedPeople extends StatelessWidget {
               context: context,
               builder: (BuildContext context) => Dialog(
                     insetPadding: const EdgeInsets.all(16.0),
-                    surfaceTintColor: Colors.white,
+                    surfaceTintColor: WHITE,
                     shape: RoundedRectangleBorder(
                       borderRadius:
                           BorderRadius.circular(0.0), // Set the radius here
@@ -148,42 +234,42 @@ class BlockedPeople extends StatelessWidget {
                           Align(
                             alignment: Alignment.topLeft,
                             child: Text(
-                              "Unblock $userName ?",
+                              "Unblock ${widget.userName} ?",
                               style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 25.0),
+                                  fontWeight: FONTBOLD, fontSize: 25.0),
                             ),
                           ),
                           const SizedBox(height: 10.0),
                           Align(
                             alignment: Alignment.topLeft,
                             child: Text(
-                              "If you unblock $userName they may be able to see your Timeline or contact you, depending on your settings",
+                              "If you unblock ${widget.userName} they may be able to see your Timeline or contact you, depending on your settings",
                               style: const TextStyle(
-                                  fontWeight: FontWeight.normal,
+                                  fontWeight: FONTNORMAL,
                                   fontSize: 15.0,
-                                  color: Colors.grey),
+                                  color: GREY),
                             ),
                           ),
                           const SizedBox(height: 10.0),
                           Align(
                             alignment: Alignment.topLeft,
                             child: Text(
-                              "Tags you and $userName previously added to each other may be restored",
+                              "Tags you and ${widget.userName} previously added to each other may be restored",
                               style: const TextStyle(
-                                  fontWeight: FontWeight.normal,
+                                  fontWeight: FONTNORMAL,
                                   fontSize: 15.0,
-                                  color: Colors.grey),
+                                  color: GREY),
                             ),
                           ),
                           const SizedBox(height: 10.0),
                           Align(
                             alignment: Alignment.topLeft,
                             child: Text(
-                              "You'll have to wait 48 hours if you want to block $userName again",
+                              "You'll have to wait 48 hours if you want to block ${widget.userName} again",
                               style: const TextStyle(
-                                  fontWeight: FontWeight.normal,
+                                  fontWeight: FONTNORMAL,
                                   fontSize: 15.0,
-                                  color: Colors.grey),
+                                  color: GREY),
                             ),
                           ),
                           const SizedBox(height: 10.0),
@@ -192,22 +278,20 @@ class BlockedPeople extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               TextButton(
-                                  onPressed: () {
+                                  onPressed: (){
                                     Navigator.pop(context);
                                   },
                                   child: const Text(
                                     "CANCEL",
                                     style: TextStyle(
-                                        fontSize: 15.0, color: Colors.black),
+                                        fontSize: 15.0, color: BLACK),
                                   )),
                               TextButton(
                                   style: TextButton.styleFrom(
                                     shape: const BeveledRectangleBorder(
                                         borderRadius: BorderRadius.zero),
                                   ),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
+                                  onPressed: widget.notifyParent,
                                   child: const Text(
                                     "UNBLOCK",
                                     style: TextStyle(
@@ -235,26 +319,33 @@ class BlockedPeople extends StatelessWidget {
                     margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
                     child: ImageFiltered(
                       imageFilter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
-                      child: Image.asset(
-                        imageUrl,
+                      child: (widget.imageUrl == "") ?
+                      Image.asset(
+                        defaultAvatar,
                         width: 30.0,
                         height: 30.0,
-                      ),
+                      ):
+                        Image.network(
+                            widget.imageUrl,
+                          width: 30.0,
+                          height: 30.0,
+                        )
+                      ,
                     ),
                   ),
                   const SizedBox(height: 4.0),
                   Expanded(
                     child: Text(
-                      userName,
+                      widget.userName,
                       style: const TextStyle(
                           fontSize: 17.0,
-                          color: Colors.black,
-                          fontWeight: FontWeight.normal),
+                          color: BLACK,
+                          fontWeight: FONTNORMAL),
                     ),
                   ),
                   const Text(
                     "UNBLOCK",
-                    style: TextStyle(color: Colors.grey),
+                    style: TextStyle(color: GREY),
                   )
                 ],
               ),

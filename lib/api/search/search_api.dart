@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:anti_fb/models/request/ReqSearchUser.dart';
+
 import '../../constants.dart';
 import '../../models/request/ReqSearch.dart';
 import '../../storage.dart';
@@ -20,6 +22,7 @@ class SearchApi {
     // Update the headers with the fetched token
     headers = {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
       //'Authorization':
       //    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTU3LCJkZXZpY2VfaWQiOiJzdHJpbmciLCJpYXQiOjE3MDIyODg2NjF9.0ZiK-pyb2vDTmDsMH4WIJU2WyXEwQjm-BKZ4WNa4aNo',
     };
@@ -43,8 +46,27 @@ class SearchApi {
     }
   }
 
+  Future searchUser(ReqSearchUser req) async {
+    await _initializeHeaders();
+
+    final String jsonData = jsonEncode(req.toJson());
+    final response = await http.post(
+      Uri.parse('$apiUrl/search_user'),
+      headers: headers,
+      body: jsonData,
+    );
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+
+      return jsonResponse; // get list success
+    } else {
+      return null; // get list false
+    }
+  }
+
   Future getSavedSearch(String index, String count) async {
     await _initializeHeaders();
+    print(headers);
     final Map<String, dynamic> requestBody = {"index": index, "count": count};
     final response = await http.post(
       Uri.parse('$apiUrl/get_saved_search'),

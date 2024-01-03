@@ -8,14 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:anti_fb/constants.dart';
 
 class SettingScreen extends StatelessWidget {
-  const SettingScreen({super.key});
+  final String name;
+  const SettingScreen({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: BG,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: WHITE,
         // title: const Text('Next page'),
       ),
       body: Column(
@@ -23,7 +24,7 @@ class SettingScreen extends StatelessWidget {
           const SizedBox(height: 4.0),
           Container(
             width: MediaQuery.of(context).size.width,
-            color: Colors.white,
+            color: WHITE,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -45,7 +46,7 @@ class SettingScreen extends StatelessWidget {
                             child: Text(
                               "Manage your information",
                               style:
-                                  TextStyle(fontSize: 13.0, color: Colors.grey),
+                                  TextStyle(fontSize: 13.0, color: GREY),
                             ),
                           ),
                         ],
@@ -60,7 +61,7 @@ class SettingScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           CupertinoPageRoute(
-                              builder: (context) => const PersonalDetail()),
+                              builder: (context) => PersonalDetail(name: name!,)),
                         );
                       },
                       style: TextButton.styleFrom(
@@ -82,7 +83,7 @@ class SettingScreen extends StatelessWidget {
                                   backgroundColor: BTNBG,
                                   child: Icon(
                                       Icons.person,
-                                    color: Colors.black,
+                                    color: BLACK,
                                   )),
                             ),
                             const Expanded(
@@ -94,13 +95,13 @@ class SettingScreen extends StatelessWidget {
                                   Text(
                                     "Personal detail",
                                     style: TextStyle(
-                                        fontSize: 17.0, color: Colors.black),
+                                        fontSize: 17.0, color: BLACK),
                                   ),
                                   Text(
                                     'Change username',
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
-                                        fontSize: 10.0, color: Colors.grey),
+                                        fontSize: 10.0, color: GREY),
                                   ),
                                 ],
                               ),
@@ -139,7 +140,7 @@ class SettingScreen extends StatelessWidget {
                               child: const CircleAvatar(
                                   radius: 20.0,
                                   backgroundColor: BTNBG,
-                                  child: Icon(Icons.security,color: Colors.black,)),
+                                  child: Icon(Icons.security,color: BLACK,)),
                             ),
                             const Expanded(
                               child: Column(
@@ -150,13 +151,13 @@ class SettingScreen extends StatelessWidget {
                                   Text(
                                     "Security",
                                     style: TextStyle(
-                                        fontSize: 17.0, color: Colors.black),
+                                        fontSize: 17.0, color: BLACK),
                                   ),
                                   Text(
                                     'Change your password',
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
-                                        fontSize: 10.0, color: Colors.grey),
+                                        fontSize: 10.0, color: GREY),
                                   ),
                                 ],
                               ),
@@ -173,7 +174,7 @@ class SettingScreen extends StatelessWidget {
           const SizedBox(height: 4.0),
           Container(
             width: MediaQuery.of(context).size.width,
-            color: Colors.white,
+            color: WHITE,
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -196,7 +197,7 @@ class SettingScreen extends StatelessWidget {
                             child: Text(
                               "Manage your block list and notification",
                               style:
-                                  TextStyle(fontSize: 13.0, color: Colors.grey),
+                                  TextStyle(fontSize: 13.0, color: GREY),
                             ),
                           ),
                         ],
@@ -230,7 +231,7 @@ class SettingScreen extends StatelessWidget {
                               child: const CircleAvatar(
                                   radius: 20.0,
                                   backgroundColor: BTNBG,
-                                  child: Icon(Icons.block,color: Colors.black,)),
+                                  child: Icon(Icons.block,color: BLACK,)),
                             ),
                             const Expanded(
                               child: Column(
@@ -241,13 +242,13 @@ class SettingScreen extends StatelessWidget {
                                   Text(
                                     "Block",
                                     style: TextStyle(
-                                        fontSize: 17.0, color: Colors.black),
+                                        fontSize: 17.0, color: BLACK),
                                   ),
                                   Text(
                                     'Your block list',
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
-                                        fontSize: 10.0, color: Colors.grey),
+                                        fontSize: 10.0, color: GREY),
                                   ),
                                 ],
                               ),
@@ -287,7 +288,7 @@ class SettingScreen extends StatelessWidget {
                               child: const CircleAvatar(
                                   radius:20.0,
                                   backgroundColor: BTNBG,
-                                  child: Icon(Icons.notifications,color: Colors.black,)),
+                                  child: Icon(Icons.notifications,color: BLACK,)),
                             ),
                             const Expanded(
                               child: Column(
@@ -298,13 +299,13 @@ class SettingScreen extends StatelessWidget {
                                   Text(
                                     "Notification",
                                     style: TextStyle(
-                                        fontSize: 17.0, color: Colors.black),
+                                        fontSize: 17.0, color: BLACK),
                                   ),
                                   Text(
                                     'Notification settings',
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
-                                        fontSize: 10.0, color: Colors.grey),
+                                        fontSize: 10.0, color: GREY),
                                   ),
                                 ],
                               ),

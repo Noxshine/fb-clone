@@ -49,7 +49,6 @@ class PostListData {
       banned : json['banned'] as String,
       state : json['state'] as String,
       author: author
-
     );
   }
 
