@@ -13,7 +13,6 @@ class PostRepository {
       if (getlistpostResult == null) {
         return false;
       }
-
       List<PostListData> listpost = [];
       List<dynamic> listpostraw = getlistpostResult['data']['post'];
       for (dynamic x in listpostraw) {

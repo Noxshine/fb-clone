@@ -84,8 +84,9 @@ class PostScreenState extends State<PostScreen> {
                   post_id: widget.id,
                   imageUrl: post.author!.avatar,
                   email: post.author!.name,
-                  timestamp: calculateTimeDifference(post.created),
+                  timestamp: post.created,
                   canEdit: false,
+                  author_id: post.author!.id,
                 ),
                 iconTheme: const IconThemeData(
                   color: GREY, // Set the color of the back arrow icon to black
@@ -300,10 +301,11 @@ void showMarkInput(BuildContext context, String id, String rateStatus) {
   );
 }
 
+
 String rateStatus(String can_rate) {
   switch (can_rate) {
     case '0':
-      return 'Already rate, post stop allow mark';
+      return 'Already rate, post stop allow rate';
     case '-1':
       return "Can't rate your own post";
     case '-2':

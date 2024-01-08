@@ -97,6 +97,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print(user_id);
     return SafeArea(
       child: Scaffold(
         body: RefreshIndicator(
@@ -150,12 +151,13 @@ class _HomePageState extends State<HomePage> {
                         item.name,
                         item.image,
                         item.described,
-                        item.created.substring(0, 10),
+                        item.created,
                         item.feel,
                         item.comment_mark,
                         item.is_felt,
                         item.author.name,
                         item.author.avatar,
+                        item.author.id,
                         false)),
               ),
             ]),

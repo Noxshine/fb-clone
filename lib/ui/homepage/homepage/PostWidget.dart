@@ -11,9 +11,12 @@ import 'package:readmore/readmore.dart';
 import '../../../api/post/comment_api.dart';
 import '../../../constants.dart';
 import '../../../models/post/ImageData.dart';
+import '../../../storage.dart';
 import '../../../widgets/TextWidget.dart';
 import '../../../widgets/custom_react_widget.dart';
 import '../../../widgets/profile_avatar.dart';
+import '../../profile/friend_profile.dart';
+import '../../profile/profile_screen.dart';
 
 // post
 class PostWidget extends StatelessWidget {
@@ -27,7 +30,7 @@ class PostWidget extends StatelessWidget {
   final String is_felt;
   final String author_name;
   final String author_avatar_url;
-
+  final String author_id;
   final bool canEdit;
 
   const PostWidget(
@@ -41,11 +44,15 @@ class PostWidget extends StatelessWidget {
       this.is_felt,
       this.author_name,
       this.author_avatar_url,
+      this.author_id,
       this.canEdit,
       {super.key});
 
+
+
   @override
   Widget build(BuildContext context) {
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5.0),
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -63,6 +70,7 @@ class PostWidget extends StatelessWidget {
                   timestamp: created,
                   canEdit: canEdit,
                   post_id: id,
+                  author_id: author_id,
                 ),
                 const SizedBox(height: 4.0),
                 // _PostCaption(caption: post.caption,),
@@ -154,13 +162,12 @@ class PostWidget extends StatelessWidget {
   }
 }
 
-class PostHeader extends StatelessWidget {
+class PostHeader extends StatefulWidget {
   final String post_id;
-
   final String imageUrl;
   final String email;
   final String timestamp;
-
+  final String author_id;
   final bool canEdit;
 
   const PostHeader(
@@ -169,28 +176,88 @@ class PostHeader extends StatelessWidget {
       required this.imageUrl,
       required this.email,
       required this.timestamp,
-      required this.canEdit});
+      required this.canEdit,
+        required this.author_id});
+
+  @override
+  State<PostHeader> createState() => _PostHeaderState();
+}
+
+class _PostHeaderState extends State<PostHeader> {
+  String? userId = "";
+
+  void initState() {
+    super.initState();
+    getId().then((value) => setState(() => userId = value!));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        ProfileAvatar(imageUrl: imageUrl),
+        ProfileAvatar(
+            imageUrl: widget.imageUrl,
+          onPressed: (){
+            if(userId != widget.author_id){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FriendProfile(
+                    userId: widget.author_id,
+                  ),
+                ),
+              );
+            }else{
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Profile(
+                    userid: widget.author_id,
+                  ),
+                ),
+              );
+            }
+          },
+        ),
         const SizedBox(width: 8.0),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                email,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
+              GestureDetector(
+                onTap:(){
+                  if(userId != widget.author_id){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FriendProfile(
+                          userId: widget.author_id,
+                        ),
+                      ),
+                    );
+                  }else{
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Profile(
+                          userid: widget.author_id,
+                        ),
+                      ),
+                    );
+                  }
+
+                } ,
+                child: Text(
+                  widget.email,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               Row(
                 children: [
                   Text(
-                    '$timestamp  • ',
+                    '${calculateTimeDifference(widget.timestamp)}  • ',
                     style: TextStyle(
                       color: GREY[600],
                       fontSize: 12.0,
@@ -209,8 +276,8 @@ class PostHeader extends StatelessWidget {
         IconButton(
           icon: const Icon(Icons.more_horiz),
           onPressed: () {
-            if (canEdit) {
-              showEditPostSheetMenu(context, post_id);
+            if (widget.canEdit) {
+              showEditPostSheetMenu(context, widget.post_id);
             }
           },
         )
